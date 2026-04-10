@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brewski Designs — Web Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Pulled directly from the BD logo gradient */
+      --navy:      #1A3A6C;
+      --blue:      #2B78BE;
+      --teal:      #4BBDB5;
+      --gold:      #C9B87A;
+      --gold-warm: #D4C58A;
+
+      /* Surfaces */
+      --bg:        #0B1220;
+      --bg-2:      #0F1830;
+      --bg-card:   #121E36;
+      --bg-card2:  #172344;
+      --text:      #E4EAF6;
+      --muted:     #7A90B0;
+      --border:    rgba(75,189,181,.16);
+      --white:     #FFFFFF;
+
+      /* Gradient shorthand */
+      --grad: linear-gradient(135deg, var(--navy), var(--blue), var(--teal), var(--gold));
+      --grad-45: linear-gradient(45deg, var(--navy), var(--blue) 40%, var(--teal) 70%, var(--gold));
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Nunito', sans-serif; line-height: 1.1; }
+
+    /* ── LOGO SVG ─────────────────────────────────────────── */
+    .bd-logo-svg { display: block; }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(11,18,32,.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      text-decoration: none;
+    }
+
+    .nav-brand-text {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -.01em;
+    }
+
+    .nav-brand-text .b1 { color: var(--navy); filter: brightness(2); }
+    .nav-brand-text .b2 {
+      background: linear-gradient(90deg, var(--teal), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .btn-nav {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: var(--white) !important;
+      padding: .48rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 700 !important;
+      font-size: .85rem !important;
+      letter-spacing: .02em;
+      transition: opacity .2s !important;
+    }
+
+    .btn-nav:hover { opacity: .85 !important; }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 9rem 5% 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background glow orbs pulled from logo palette */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -15%;
+      right: -8%;
+      width: 640px; height: 640px;
+      background: radial-gradient(circle, rgba(43,120,190,.18) 0%, transparent 68%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -10%;
+      left: -8%;
+      width: 540px; height: 540px;
+      background: radial-gradient(circle, rgba(75,189,181,.12) 0%, transparent 68%);
+      pointer-events: none;
+    }
+
+    /* Subtle diagonal gradient sweep */
+    .hero-sweep {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+        rgba(26,58,108,.3) 0%,
+        transparent 45%,
+        rgba(75,189,181,.04) 75%,
+        rgba(201,184,122,.06) 100%
+      );
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1200px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(75,189,181,.1);
+      border: 1px solid rgba(75,189,181,.25);
+      color: var(--teal);
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-pill::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.4; transform:scale(.65); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 460px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: .95rem;
+      font-weight: 700;
+      padding: .9rem 2.1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+      transition: opacity .2s, transform .15s;
+      box-shadow: 0 6px 28px rgba(43,120,190,.35);
+    }
+
+    .btn-primary:hover { opacity: .88; transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: .95rem;
+      font-weight: 500;
+      padding: .9rem 2.1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.1);
+      display: inline-block;
+      transition: color .2s, border-color .2s, transform .15s;
+    }
+
+    .btn-ghost:hover { color: var(--white); border-color: rgba(75,189,181,.35); transform: translateY(-2px); }
+
+    /* Hero right — big logo + floating card */
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-logo-wrap {
+      width: 340px;
+      height: 340px;
+      border-radius: 40px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 0 1px rgba(75,189,181,.08),
+        0 40px 100px rgba(0,0,0,.5),
+        0 0 80px rgba(43,120,190,.1);
+    }
+
+    .hero-logo-wrap svg { width: 220px; height: auto; }
+
+    .float-card {
+      position: absolute;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: .9rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,.45);
+    }
+
+    .float-card.fc-1 { bottom: -1.5rem; left: -2rem; }
+    .float-card.fc-2 { top: -1rem; right: -1.5rem; }
+
+    .fc-icon {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .fc-icon.grad-bg {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+    }
+
+    .fc-icon.gold-bg {
+      background: linear-gradient(135deg, var(--teal), var(--gold));
+    }
+
+    .fc-text strong {
+      display: block;
+      font-size: .83rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .fc-text span {
+      font-size: .73rem;
+      color: var(--muted);
+    }
+
+    /* ── SECTION COMMONS ──────────────────────────────────── */
+    section { padding: 6rem 5%; }
+
+    .section-label {
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, var(--teal), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .75rem;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -.03em;
+      margin-bottom: 1rem;
+    }
+
+    .section-title .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 520px;
+      line-height: 1.75;
+    }
+
+    .section-header { margin-bottom: 4rem; }
+
+    /* ── SERVICES ─────────────────────────────────────────── */
+    #services { background: var(--bg); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .25s, border-color .25s;
+    }
+
+    /* Top gradient line on hover */
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--grad);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+    .service-card:hover::before { opacity: 1; }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(75,189,181,.3);
+      box-shadow: 0 20px 56px rgba(11,18,32,.6), 0 0 32px rgba(43,120,190,.1);
+    }
+
+    .svc-num {
+      font-family: 'Nunito', sans-serif;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.4rem;
+      opacity: .5;
+    }
+
+    .svc-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: rgba(75,189,181,.08);
+      border: 1px solid rgba(75,189,181,.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: .7rem;
+    }
+
+    .service-card > p {
+      font-size: .91rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .svc-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+
+    .svc-list li {
+      font-size: .84rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .svc-list li::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--gold));
+      flex-shrink: 0;
+    }
+
+    /* ── PORTFOLIO ────────────────────────────────────────── */
+    #portfolio { background: var(--bg-2); }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .project-card {
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+      border-color: rgba(75,189,181,.35);
+    }
+
+    .project-thumb {
+      width: 100%;
+      aspect-ratio: 16/10;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Nunito', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -.04em;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.55));
+    }
+
+    .pt-1 { background: linear-gradient(135deg, #0a1628, var(--navy)); color: var(--teal); }
+    .pt-2 { background: linear-gradient(135deg, #0c1f3a, var(--blue)); color: #93d3ef; }
+    .pt-3 { background: linear-gradient(135deg, #0f1e30, #1a6060); color: var(--teal); }
+
+    .project-info { padding: 1.25rem 1.5rem 1.5rem; }
+
+    .project-tag {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, var(--teal), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .4rem;
+      display: inline-block;
+    }
+
+    .project-info h3 { font-size: 1rem; font-weight: 800; color: var(--white); margin-bottom: .35rem; }
+    .project-info p { font-size: .83rem; color: var(--muted); line-height: 1.55; }
+
+    .portfolio-cta { text-align: center; margin-top: 3rem; }
+
+    /* ── PROCESS ──────────────────────────────────────────── */
+    #process { background: var(--bg); padding: 5rem 5%; }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 27px; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+    }
+
+    .step { text-align: center; position: relative; }
+
+    .step-num {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      background-clip: text;
+      margin: 0 auto 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Gradient number text */
+    .step-num span {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .step h3 { font-size: 1rem; font-weight: 800; color: var(--white); margin-bottom: .5rem; }
+    .step p { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── CONTACT ──────────────────────────────────────────── */
+    #contact { background: var(--bg); padding: 6rem 5%; }
+
+    .contact-wrap { max-width: 760px; margin: 0 auto; text-align: center; }
+    .contact-wrap .section-header { margin-bottom: 2.5rem; }
+    .contact-wrap .section-sub { margin: 0 auto; }
+
+    .contact-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 3rem;
+      text-align: left;
+      margin-top: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle gradient top border */
+    .contact-form::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--grad);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    .form-group { margin-bottom: 1.1rem; }
+
+    .form-group label {
+      display: block;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: .45rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: .78rem 1rem;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: .92rem;
+      color: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(122,144,176,.45); }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: rgba(75,189,181,.45);
+      box-shadow: 0 0 0 3px rgba(75,189,181,.09);
+    }
+
+    .form-group select option { background: #172344; color: var(--white); }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      margin-top: .5rem;
+      box-shadow: 0 6px 28px rgba(43,120,190,.3);
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    footer {
+      background: #080C18;
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    footer p { font-size: .82rem; color: var(--muted); }
+
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: .82rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .services-grid { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .process-steps::before { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 4%; }
+      .nav-links { display: none; }
+      section, #process, #contact { padding: 4rem 4%; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form { padding: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ──────────────────────────────────────────────── -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <!-- BD logo — inline SVG matching the uploaded logo exactly -->
+      <svg class="bd-logo-svg" width="38" height="38" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="navGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#1A3A6C"/>
+            <stop offset="35%"  stop-color="#2B78BE"/>
+            <stop offset="68%"  stop-color="#4BBDB5"/>
+            <stop offset="100%" stop-color="#C9B87A"/>
+          </linearGradient>
+        </defs>
+        <!-- B -->
+        <text x="2" y="72" font-family="Nunito, sans-serif" font-weight="900" font-size="72" fill="url(#navGrad)">BD</text>
+      </svg>
+      <span class="nav-brand-text">
+        <span class="b1">Brewski</span> <span class="b2">Designs</span>
+      </span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="btn-nav">Let's Talk</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <section class="hero" id="home">
+    <div class="hero-sweep"></div>
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-pill">Available for new projects</div>
+        <h1>Websites that <span class="grad-text">stand out.</span></h1>
+        <p>Brewski Designs crafts bold, fast, custom websites for businesses that want to make a real impression. No templates. No compromises. Just design that works.</p>
+        <div class="hero-btns">
+          <a href="#contact" class="btn-primary">Start a Project</a>
+          <a href="#portfolio" class="btn-ghost">View My Work</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <!-- Large logo centrepiece -->
+        <div class="hero-logo-wrap">
+          <svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="heroGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#1A3A6C"/>
+                <stop offset="33%"  stop-color="#2B78BE"/>
+                <stop offset="66%"  stop-color="#4BBDB5"/>
+                <stop offset="100%" stop-color="#C9B87A"/>
+              </linearGradient>
+              <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#1A3A6C"/>
+                <stop offset="40%"  stop-color="#2B78BE"/>
+                <stop offset="70%"  stop-color="#4BBDB5"/>
+                <stop offset="100%" stop-color="#C9B87A"/>
+              </linearGradient>
+            </defs>
+            <!-- BD monogram -->
+            <text x="30" y="240"
+              font-family="Nunito, sans-serif"
+              font-weight="900"
+              font-size="220"
+              fill="url(#heroGrad)"
+              letter-spacing="-8">BD</text>
+            <!-- Brewski Designs wordmark -->
+            <text x="30" y="308"
+              font-family="Nunito, sans-serif"
+              font-weight="800"
+              font-size="42"
+              fill="url(#textGrad)"
+              letter-spacing="1">Brewski Designs</text>
+          </svg>
+        </div>
+
+        <!-- Floating cards -->
+        <div class="float-card fc-1">
+          <div class="fc-icon grad-bg">🖥️</div>
+          <div class="fc-text">
+            <strong>Custom Built</strong>
+            <span>Zero templates</span>
+          </div>
+        </div>
+
+        <div class="float-card fc-2">
+          <div class="fc-icon gold-bg">⚡</div>
+          <div class="fc-text">
+            <strong>Fast Delivery</strong>
+            <span>2–4 week turnaround</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVICES ─────────────────────────────────────────── -->
+  <section id="services">
+    <div class="section-header">
+      <div class="section-label">What I Do</div>
+      <h2 class="section-title">Services that <span class="grad-text">deliver.</span></h2>
+      <p class="section-sub">Every project is built from scratch around your goals — clean, fast web design that actually works for your business.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="svc-num">01</div>
+        <div class="svc-icon">🖥️</div>
+        <h3>Website Design</h3>
+        <p>Custom websites designed from scratch to impress your visitors and convert them into customers. Built to load fast and look great on every device.</p>
+        <ul class="svc-list">
+          <li>Custom UI/UX design</li>
+          <li>Mobile-first responsive layouts</li>
+          <li>Landing pages &amp; full multi-page sites</li>
+          <li>E-commerce &amp; product pages</li>
+          <li>Fast performance &amp; SEO-ready structure</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="svc-num">02</div>
+        <div class="svc-icon">📐</div>
+        <h3>UX &amp; Redesign</h3>
+        <p>Got an existing site that isn't working hard enough? I'll audit, redesign, and improve the experience — turning a dated website into one that performs.</p>
+        <ul class="svc-list">
+          <li>UX audit &amp; heatmap review</li>
+          <li>Full visual redesign</li>
+          <li>Conversion rate optimisation</li>
+          <li>Accessibility improvements</li>
+          <li>Speed &amp; performance overhaul</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="svc-num">03</div>
+        <div class="svc-icon">📱</div>
+        <h3>Landing Pages</h3>
+        <p>Single-page sites built to convert — for product launches, ad campaigns, or lead generation. Designed to focus attention and drive one clear action.</p>
+        <ul class="svc-list">
+          <li>High-conversion layouts</li>
+          <li>A/B testing-ready structure</li>
+          <li>Fast build turnaround</li>
+          <li>Lead capture &amp; form integration</li>
+          <li>Analytics setup</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="svc-num">04</div>
+        <div class="svc-icon">🛒</div>
+        <h3>E-Commerce Design</h3>
+        <p>Online stores designed to sell. Whether you're launching or revamping, I design intuitive, trustworthy shopping experiences that boost revenue.</p>
+        <ul class="svc-list">
+          <li>Product &amp; collection page design</li>
+          <li>Checkout flow optimisation</li>
+          <li>Shopify &amp; WooCommerce design</li>
+          <li>Mobile shopping experience</li>
+          <li>Trust &amp; conversion elements</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── PORTFOLIO ────────────────────────────────────────── -->
+  <section id="portfolio">
+    <div class="section-header">
+      <div class="section-label">Recent Work</div>
+      <h2 class="section-title">Projects I'm <span class="grad-text">proud of.</span></h2>
+      <p class="section-sub">A selection of recent web design projects — each one built to solve a real problem for a real business.</p>
+    </div>
+    <div class="portfolio-grid">
+
+      <div class="project-card">
+        <div class="project-thumb pt-1">AF</div>
+        <div class="project-info">
+          <div class="project-tag">Web Design</div>
+          <h3>Apex Fitness Studio</h3>
+          <p>Membership-focused website for a local gym — bold design, online booking integration, and a high-converting landing page.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb pt-2">MK</div>
+        <div class="project-info">
+          <div class="project-tag">Web Design</div>
+          <h3>Morley &amp; King Solicitors</h3>
+          <p>Clean, professional website for a law firm — clear service pages, contact forms, and a trustworthy design that converts enquiries.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb pt-3">SL</div>
+        <div class="project-info">
+          <div class="project-tag">E-Commerce Design</div>
+          <h3>Saltlake Coffee Co.</h3>
+          <p>Custom e-commerce website for an artisan coffee roaster — subscription model, product pages, and a seamless checkout.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="portfolio-cta">
+      <a href="#contact" class="btn-ghost">Get in touch to see more work &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ───────────────────────────────────────────── -->
+  <section id="process">
+    <div class="section-header">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Simple. <span class="grad-text">Straightforward.</span></h2>
+      <p class="section-sub">No jargon, no surprises. Here's what working with Brewski Designs actually looks like.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num"><span>01</span></div>
+        <h3>Discovery</h3>
+        <p>We talk through your goals, audience, and vision. I learn what makes your business tick.</p>
+      </div>
+      <div class="step">
+        <div class="step-num"><span>02</span></div>
+        <h3>Design</h3>
+        <p>I craft a custom design concept — you give feedback, we refine until it's exactly right.</p>
+      </div>
+      <div class="step">
+        <div class="step-num"><span>03</span></div>
+        <h3>Build</h3>
+        <p>Your site is built to be fast, responsive, and ready for the real world.</p>
+      </div>
+      <div class="step">
+        <div class="step-num"><span>04</span></div>
+        <h3>Launch</h3>
+        <p>We go live. I handle everything and stay on hand for any tweaks post-launch.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ───────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="contact-wrap">
+      <div class="section-header">
+        <div class="section-label">Get In Touch</div>
+        <h2 class="section-title">Let's build something <span class="grad-text">great.</span></h2>
+        <p class="section-sub">Have a project in mind? Fill in the form and I'll get back to you within 24 hours — no obligation, just a conversation.</p>
+      </div>
+      <div class="contact-form">
+        <form>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" placeholder="Jane Smith" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="jane@yourbusiness.com" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="budget">Budget Range</label>
+              <select id="budget">
+                <option value="">Select a range…</option>
+                <option>Under £500</option>
+                <option>£500 – £1,000</option>
+                <option>£1,000 – £2,500</option>
+                <option>£2,500 – £5,000</option>
+                <option>£5,000+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="service">Service Needed</label>
+              <select id="service">
+                <option value="">Select a service…</option>
+                <option>New Website</option>
+                <option>Website Redesign</option>
+                <option>Landing Page</option>
+                <option>E-Commerce Design</option>
+                <option>Not Sure Yet</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="message">Tell Me About Your Project</label>
+            <textarea id="message" placeholder="What are you building? Who is it for? Any inspiration or examples you like?"></textarea>
+          </div>
+          <button type="submit" class="btn-primary btn-submit">Send Message &rarr;</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer>
+    <a href="#" class="nav-brand">
+      <svg width="30" height="30" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ftGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1A3A6C"/>
+            <stop offset="35%" stop-color="#2B78BE"/>
+            <stop offset="68%" stop-color="#4BBDB5"/>
+            <stop offset="100%" stop-color="#C9B87A"/>
+          </linearGradient>
+        </defs>
+        <text x="2" y="72" font-family="Nunito,sans-serif" font-weight="900" font-size="72" fill="url(#ftGrad)">BD</text>
+      </svg>
+      <span class="nav-brand-text" style="font-size:1rem;">
+        <span class="b1">Brewski</span> <span class="b2">Designs</span>
+      </span>
+    </a>
+    <p>&copy; 2025 Brewski Designs. All rights reserved.</p>
+    <ul class="footer-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
