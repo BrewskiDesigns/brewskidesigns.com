@@ -6,44 +6,75 @@
   <title>Brewski Designs — Web Design</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Pulled directly from the BD logo gradient */
-      --navy:      #1A3A6C;
-      --blue:      #2B78BE;
-      --teal:      #4BBDB5;
-      --gold:      #C9B87A;
-      --gold-warm: #D4C58A;
+      --navy:      #1e3a8a;
+      --blue:      #1D4ED8;
+      --sky:       #60A5FA;
+      --black:     #0A1628;
 
       /* Surfaces */
-      --bg:        #0B1220;
-      --bg-2:      #0F1830;
-      --bg-card:   #121E36;
-      --bg-card2:  #172344;
-      --text:      #E4EAF6;
-      --muted:     #7A90B0;
-      --border:    rgba(75,189,181,.16);
+      --bg:        #FFFFFF;
+      --bg-2:      #F0F6FF;
+      --bg-card:   #F7FBFF;
+      --bg-card2:  #EBF4FF;
+      --text:      #0A1628;
+      --muted:     #4A607A;
+      --border:    rgba(29,78,216,.14);
       --white:     #FFFFFF;
 
+      /* Component-specific */
+      --nav-bg:         rgba(255,255,255,.94);
+      --float-card-bg:  #FFFFFF;
+      --stat-box-bg:    rgba(255,255,255,.85);
+      --stat-box-hover: rgba(255,255,255,.98);
+      --footer-bg:      #0A1628;
+
       /* Gradient shorthand */
-      --grad: linear-gradient(135deg, var(--navy), var(--blue), var(--teal), var(--gold));
-      --grad-45: linear-gradient(45deg, var(--navy), var(--blue) 40%, var(--teal) 70%, var(--gold));
+      --grad: linear-gradient(135deg, var(--navy), var(--blue), var(--sky));
+      --grad-45: linear-gradient(45deg, var(--navy), var(--blue) 50%, var(--sky));
+    }
+
+    /* ── DARK MODE ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg:        #090F1D;
+      --bg-2:      #0C1526;
+      --bg-card:   #101A30;
+      --bg-card2:  #142038;
+      --text:      #E4EDF8;
+      --muted:     #6A84A6;
+      --border:    rgba(96,165,250,.13);
+
+      --nav-bg:         rgba(9,15,29,.92);
+      --float-card-bg:  #142038;
+      --stat-box-bg:    rgba(9,15,29,.78);
+      --stat-box-hover: rgba(9,15,29,.94);
+      --footer-bg:      #060C18;
+    }
+
+    /* Smooth theme transitions */
+    body, nav, section, footer,
+    .about-card, .project-card, .contact-form,
+    .float-card, .about-stat, .step-num,
+    .form-group input, .form-group select, .form-group textarea,
+    .hero-logo-wrap {
+      transition: background .3s, background-color .3s, border-color .3s, color .3s, box-shadow .3s;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Lora', Georgia, serif;
       color: var(--text);
       background: var(--bg);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    h1, h2, h3, h4 { font-family: 'Nunito', sans-serif; line-height: 1.1; }
+    h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; line-height: 1.1; }
 
     /* ── LOGO SVG ─────────────────────────────────────────── */
     .bd-logo-svg { display: block; }
@@ -56,9 +87,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 5%;
+      padding: 0 5% 0 7%;
       height: 70px;
-      background: rgba(11,18,32,.88);
+      background: var(--nav-bg);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
@@ -71,19 +102,14 @@
     }
 
     .nav-brand-text {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Playfair Display', serif;
       font-size: 1.15rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: -.01em;
     }
 
-    .nav-brand-text .b1 { color: var(--navy); filter: brightness(2); }
-    .nav-brand-text .b2 {
-      background: linear-gradient(90deg, var(--teal), var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .nav-brand-text .b1 { color: var(--black); }
+    .nav-brand-text .b2 { color: var(--blue); }
 
     .nav-links {
       display: flex;
@@ -98,15 +124,16 @@
       font-size: .88rem;
       font-weight: 500;
       transition: color .2s;
+      font-family: 'Lora', serif;
     }
 
-    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover { color: var(--text); }
 
     .btn-nav {
-      background: linear-gradient(135deg, var(--blue), var(--teal));
+      background: var(--blue);
       color: var(--white) !important;
       padding: .48rem 1.2rem;
-      border-radius: 6px;
+      border-radius: 2px;
       font-weight: 700 !important;
       font-size: .85rem !important;
       letter-spacing: .02em;
@@ -125,14 +152,14 @@
       overflow: hidden;
     }
 
-    /* Background glow orbs pulled from logo palette */
+    /* Subtle background tint orbs */
     .hero::before {
       content: '';
       position: absolute;
       top: -15%;
       right: -8%;
       width: 640px; height: 640px;
-      background: radial-gradient(circle, rgba(43,120,190,.18) 0%, transparent 68%);
+      background: radial-gradient(circle, rgba(29,78,216,.07) 0%, transparent 68%);
       pointer-events: none;
     }
 
@@ -142,19 +169,18 @@
       bottom: -10%;
       left: -8%;
       width: 540px; height: 540px;
-      background: radial-gradient(circle, rgba(75,189,181,.12) 0%, transparent 68%);
+      background: radial-gradient(circle, rgba(96,165,250,.06) 0%, transparent 68%);
       pointer-events: none;
     }
 
-    /* Subtle diagonal gradient sweep */
+    /* Subtle diagonal sweep */
     .hero-sweep {
       position: absolute;
       inset: 0;
       background: linear-gradient(135deg,
-        rgba(26,58,108,.3) 0%,
+        rgba(30,58,138,.04) 0%,
         transparent 45%,
-        rgba(75,189,181,.04) 75%,
-        rgba(201,184,122,.06) 100%
+        rgba(96,165,250,.03) 100%
       );
       pointer-events: none;
     }
@@ -174,23 +200,24 @@
       display: inline-flex;
       align-items: center;
       gap: .5rem;
-      background: rgba(75,189,181,.1);
-      border: 1px solid rgba(75,189,181,.25);
-      color: var(--teal);
+      background: rgba(29,78,216,.07);
+      border: 1px solid rgba(29,78,216,.2);
+      color: var(--blue);
       font-size: .76rem;
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
       padding: .35rem 1rem;
-      border-radius: 100px;
+      border-radius: 2px;
       margin-bottom: 1.5rem;
+      font-family: 'Lora', serif;
     }
 
     .hero-pill::before {
       content: '';
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--teal);
+      background: var(--blue);
       animation: blink 2s infinite;
     }
 
@@ -202,7 +229,7 @@
     .hero h1 {
       font-size: clamp(2.8rem, 5vw, 4.4rem);
       font-weight: 900;
-      color: var(--white);
+      color: var(--text);
       letter-spacing: -.03em;
       margin-bottom: 1.25rem;
     }
@@ -225,19 +252,19 @@
     .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--blue), var(--teal));
+      background: var(--blue);
       color: var(--white);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Lora', serif;
       font-size: .95rem;
       font-weight: 700;
       padding: .9rem 2.1rem;
-      border-radius: 8px;
+      border-radius: 2px;
       text-decoration: none;
       border: none;
       cursor: pointer;
       display: inline-block;
       transition: opacity .2s, transform .15s;
-      box-shadow: 0 6px 28px rgba(43,120,190,.35);
+      box-shadow: 0 6px 28px rgba(29,78,216,.22);
     }
 
     .btn-primary:hover { opacity: .88; transform: translateY(-2px); }
@@ -245,18 +272,18 @@
     .btn-ghost {
       background: transparent;
       color: var(--muted);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Lora', serif;
       font-size: .95rem;
       font-weight: 500;
       padding: .9rem 2.1rem;
-      border-radius: 8px;
+      border-radius: 2px;
       text-decoration: none;
-      border: 1px solid rgba(255,255,255,.1);
+      border: 1px solid rgba(29,78,216,.2);
       display: inline-block;
       transition: color .2s, border-color .2s, transform .15s;
     }
 
-    .btn-ghost:hover { color: var(--white); border-color: rgba(75,189,181,.35); transform: translateY(-2px); }
+    .btn-ghost:hover { color: var(--text); border-color: var(--blue); transform: translateY(-2px); }
 
     /* Hero right — big logo + floating card */
     .hero-visual {
@@ -269,30 +296,29 @@
     .hero-logo-wrap {
       width: 340px;
       height: 340px;
-      border-radius: 40px;
-      background: rgba(255,255,255,.03);
+      border-radius: 4px;
+      background: var(--bg-card);
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow:
-        0 0 0 1px rgba(75,189,181,.08),
-        0 40px 100px rgba(0,0,0,.5),
-        0 0 80px rgba(43,120,190,.1);
+        0 0 0 1px rgba(29,78,216,.06),
+        0 40px 100px rgba(29,78,216,.08);
     }
 
     .hero-logo-wrap svg { width: 220px; height: auto; }
 
     .float-card {
       position: absolute;
-      background: var(--bg-card2);
+      background: var(--float-card-bg);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 2px;
       padding: .9rem 1.25rem;
       display: flex;
       align-items: center;
       gap: .8rem;
-      box-shadow: 0 12px 40px rgba(0,0,0,.45);
+      box-shadow: 0 12px 40px rgba(29,78,216,.1);
     }
 
     .float-card.fc-1 { bottom: -1.5rem; left: -2rem; }
@@ -300,25 +326,26 @@
 
     .fc-icon {
       width: 38px; height: 38px;
-      border-radius: 8px;
+      border-radius: 2px;
       display: flex; align-items: center; justify-content: center;
       font-size: 1.1rem;
       flex-shrink: 0;
     }
 
     .fc-icon.grad-bg {
-      background: linear-gradient(135deg, var(--blue), var(--teal));
+      background: linear-gradient(135deg, var(--navy), var(--blue));
     }
 
     .fc-icon.gold-bg {
-      background: linear-gradient(135deg, var(--teal), var(--gold));
+      background: linear-gradient(135deg, var(--blue), var(--sky));
     }
 
     .fc-text strong {
       display: block;
       font-size: .83rem;
       font-weight: 700;
-      color: var(--white);
+      color: var(--text);
+      font-family: 'Playfair Display', serif;
     }
 
     .fc-text span {
@@ -334,18 +361,16 @@
       font-weight: 700;
       letter-spacing: .14em;
       text-transform: uppercase;
-      background: linear-gradient(90deg, var(--teal), var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--blue);
       margin-bottom: .75rem;
       display: inline-block;
+      font-family: 'Lora', serif;
     }
 
     .section-title {
       font-size: clamp(2rem, 3.5vw, 2.8rem);
       font-weight: 900;
-      color: var(--white);
+      color: var(--text);
       letter-spacing: -.03em;
       margin-bottom: 1rem;
     }
@@ -366,101 +391,160 @@
 
     .section-header { margin-bottom: 4rem; }
 
-    /* ── SERVICES ─────────────────────────────────────────── */
-    #services { background: var(--bg); }
+    /* ── ABOUT CARD ───────────────────────────────────────── */
+    #services { background: var(--bg-2); }
 
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      background: var(--bg-card);
+    .about-card {
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2.5rem;
+      border-radius: 3px;
+      padding: 3.5rem 2rem 3.5rem 3.5rem;
       position: relative;
       overflow: hidden;
-      transition: transform .2s, box-shadow .25s, border-color .25s;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: stretch;
     }
 
-    /* Top gradient line on hover */
-    .service-card::before {
+    /* Gradient top border */
+    .about-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 2px;
+      height: 3px;
       background: var(--grad);
-      opacity: 0;
-      transition: opacity .3s;
     }
 
-    .service-card:hover::before { opacity: 1; }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(75,189,181,.3);
-      box-shadow: 0 20px 56px rgba(11,18,32,.6), 0 0 32px rgba(43,120,190,.1);
-    }
-
-    .svc-num {
-      font-family: 'Nunito', sans-serif;
-      font-size: .72rem;
-      font-weight: 800;
-      letter-spacing: .12em;
+    /* Decorative background monogram */
+    .about-card::after {
+      content: 'BD';
+      position: absolute;
+      bottom: -2rem;
+      right: 1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 12rem;
       background: var(--grad);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 1.4rem;
-      opacity: .5;
+      opacity: .04;
+      pointer-events: none;
+      line-height: 1;
     }
 
-    .svc-icon {
-      width: 52px; height: 52px;
-      border-radius: 12px;
-      background: rgba(75,189,181,.08);
-      border: 1px solid rgba(75,189,181,.18);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .service-card h3 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: .7rem;
-    }
-
-    .service-card > p {
-      font-size: .91rem;
-      color: var(--muted);
-      line-height: 1.7;
+    .about-left h3 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -.03em;
       margin-bottom: 1.5rem;
     }
 
-    .svc-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
-
-    .svc-list li {
-      font-size: .84rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: .6rem;
+    .about-left h3 span {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .svc-list li::before {
-      content: '';
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--teal), var(--gold));
-      flex-shrink: 0;
+    .about-left p {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .about-left p:last-of-type { margin-bottom: 0; }
+
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .about-stats-row {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      z-index: 1;
+    }
+
+    .about-right .about-stat {
+      padding: 1rem 1rem;
+    }
+
+    .about-image-box {
+      flex: 1;
+      border-radius: 3px;
+      overflow: hidden;
+      min-height: 320px;
+      position: relative;
+      background: var(--bg-card2);
+      border: none;
+      margin: 1rem 0;
+    }
+
+    .about-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 30% center;
+      display: block;
+      position: absolute;
+      inset: 0;
+    }
+
+    .about-stat {
+      background: var(--stat-box-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(29,78,216,.18);
+      border-radius: 2px;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      transition: border-color .2s, background .2s;
+    }
+
+    .about-stat:hover {
+      background: var(--stat-box-hover);
+      border-color: rgba(29,78,216,.4);
+    }
+
+    .about-stat .stat-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: .4rem;
+      display: block;
+    }
+
+    .about-stat .stat-label {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    @media (max-width: 768px) {
+      .about-card { grid-template-columns: 1fr; gap: 2.5rem; padding: 2rem; }
+      .about-image-box { border-radius: 2px; min-height: 260px; }
+      .about-card::after { display: none; }
     }
 
     /* ── PORTFOLIO ────────────────────────────────────────── */
-    #portfolio { background: var(--bg-2); }
+    #portfolio { background: var(--bg); }
 
     .portfolio-grid {
       display: grid;
@@ -469,9 +553,9 @@
     }
 
     .project-card {
-      border-radius: 14px;
+      border-radius: 2px;
       overflow: hidden;
-      background: var(--bg-card);
+      background: var(--white);
       border: 1px solid var(--border);
       transition: transform .25s, box-shadow .25s, border-color .25s;
       cursor: pointer;
@@ -479,15 +563,15 @@
 
     .project-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 24px 60px rgba(0,0,0,.5);
-      border-color: rgba(75,189,181,.35);
+      box-shadow: 0 24px 60px rgba(29,78,216,.1);
+      border-color: rgba(29,78,216,.35);
     }
 
     .project-thumb {
       width: 100%;
       aspect-ratio: 16/10;
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Playfair Display', serif;
       font-size: 2.2rem;
       font-weight: 900;
       letter-spacing: -.04em;
@@ -498,12 +582,12 @@
     .project-thumb::after {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.55));
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.2));
     }
 
-    .pt-1 { background: linear-gradient(135deg, #0a1628, var(--navy)); color: var(--teal); }
-    .pt-2 { background: linear-gradient(135deg, #0c1f3a, var(--blue)); color: #93d3ef; }
-    .pt-3 { background: linear-gradient(135deg, #0f1e30, #1a6060); color: var(--teal); }
+    .pt-1 { background: linear-gradient(135deg, #dbeafe, #bfdbfe); color: var(--navy); }
+    .pt-2 { background: linear-gradient(135deg, #eff6ff, #dbeafe); color: var(--blue); }
+    .pt-3 { background: linear-gradient(135deg, #e0f2fe, #bae6fd); color: var(--navy); }
 
     .project-info { padding: 1.25rem 1.5rem 1.5rem; }
 
@@ -512,21 +596,19 @@
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
-      background: linear-gradient(90deg, var(--teal), var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--blue);
       margin-bottom: .4rem;
       display: inline-block;
+      font-family: 'Lora', serif;
     }
 
-    .project-info h3 { font-size: 1rem; font-weight: 800; color: var(--white); margin-bottom: .35rem; }
+    .project-info h3 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: .35rem; }
     .project-info p { font-size: .83rem; color: var(--muted); line-height: 1.55; }
 
     .portfolio-cta { text-align: center; margin-top: 3rem; }
 
     /* ── PROCESS ──────────────────────────────────────────── */
-    #process { background: var(--bg); padding: 5rem 5%; }
+    #process { background: var(--bg-2); padding: 5rem 5%; }
 
     .process-steps {
       display: grid;
@@ -548,14 +630,13 @@
 
     .step-num {
       width: 54px; height: 54px;
-      border-radius: 50%;
-      background: var(--bg-card);
+      border-radius: 2px;
+      background: var(--white);
       border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Playfair Display', serif;
       font-weight: 900;
       font-size: 1rem;
-      background-clip: text;
       margin: 0 auto 1.2rem;
       position: relative;
       z-index: 1;
@@ -569,7 +650,7 @@
       background-clip: text;
     }
 
-    .step h3 { font-size: 1rem; font-weight: 800; color: var(--white); margin-bottom: .5rem; }
+    .step h3 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: .5rem; }
     .step p { font-size: .85rem; color: var(--muted); line-height: 1.6; }
 
     /* ── CONTACT ──────────────────────────────────────────── */
@@ -580,9 +661,9 @@
     .contact-wrap .section-sub { margin: 0 auto; }
 
     .contact-form {
-      background: var(--bg-card);
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 18px;
+      border-radius: 2px;
       padding: 3rem;
       text-align: left;
       margin-top: 3rem;
@@ -590,7 +671,7 @@
       overflow: hidden;
     }
 
-    /* Subtle gradient top border */
+    /* Gradient top border */
     .contact-form::before {
       content: '';
       position: absolute;
@@ -610,6 +691,7 @@
       margin-bottom: .45rem;
       letter-spacing: .04em;
       text-transform: uppercase;
+      font-family: 'Lora', serif;
     }
 
     .form-group input,
@@ -617,42 +699,42 @@
     .form-group textarea {
       width: 100%;
       padding: .78rem 1rem;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 8px;
-      font-family: 'Inter', sans-serif;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'Lora', serif;
       font-size: .92rem;
-      color: var(--white);
+      color: var(--text);
       outline: none;
       transition: border-color .2s, box-shadow .2s;
     }
 
     .form-group input::placeholder,
-    .form-group textarea::placeholder { color: rgba(122,144,176,.45); }
+    .form-group textarea::placeholder { color: rgba(74,96,122,.45); }
 
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-      border-color: rgba(75,189,181,.45);
-      box-shadow: 0 0 0 3px rgba(75,189,181,.09);
+      border-color: rgba(29,78,216,.45);
+      box-shadow: 0 0 0 3px rgba(29,78,216,.07);
     }
 
-    .form-group select option { background: #172344; color: var(--white); }
+    .form-group select option { background: var(--white); color: var(--text); }
     .form-group textarea { resize: vertical; min-height: 130px; }
 
     .btn-submit {
       width: 100%;
       padding: 1rem;
       font-size: 1rem;
-      border-radius: 8px;
+      border-radius: 2px;
       margin-top: .5rem;
-      box-shadow: 0 6px 28px rgba(43,120,190,.3);
+      box-shadow: 0 6px 28px rgba(29,78,216,.18);
     }
 
     /* ── FOOTER ───────────────────────────────────────────── */
     footer {
-      background: #080C18;
-      border-top: 1px solid var(--border);
+      background: var(--footer-bg);
+      border-top: 1px solid rgba(255,255,255,.08);
       padding: 2.5rem 5%;
       display: flex;
       align-items: center;
@@ -661,11 +743,47 @@
       flex-wrap: wrap;
     }
 
-    footer p { font-size: .82rem; color: var(--muted); }
+    footer p { font-size: .82rem; color: rgba(255,255,255,.45); }
 
     .footer-links { display: flex; gap: 1.5rem; list-style: none; }
-    .footer-links a { font-size: .82rem; color: var(--muted); text-decoration: none; transition: color .2s; }
-    .footer-links a:hover { color: var(--white); }
+    .footer-links a { font-size: .82rem; color: rgba(255,255,255,.45); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: rgba(255,255,255,.9); }
+
+    footer .nav-brand-text .b1 { color: rgba(255,255,255,.9); }
+    footer .nav-brand-text .b2 { color: var(--sky); }
+
+    /* ── DARK MODE OVERRIDES ─────────────────────────────── */
+    [data-theme="dark"] .pt-1 { background: linear-gradient(135deg, #0d1f45, #1e3a8a); color: #93C5FD; }
+    [data-theme="dark"] .pt-2 { background: linear-gradient(135deg, #0f1e3c, #1D4ED8); color: #BFDBFE; }
+    [data-theme="dark"] .pt-3 { background: linear-gradient(135deg, #0a1c38, #164E7A); color: #93C5FD; }
+
+    [data-theme="dark"] .about-card { background: var(--bg-card); }
+    [data-theme="dark"] .contact-form { background: var(--bg-card); }
+    [data-theme="dark"] .step-num { background: var(--bg-card); }
+    [data-theme="dark"] .project-card { background: var(--bg-card); }
+    [data-theme="dark"] .hero-logo-wrap { background: var(--bg-card); }
+
+    /* Toggle button */
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      cursor: pointer;
+      padding: .38rem .5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: color .2s, border-color .2s, background .3s;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      color: var(--text);
+      border-color: var(--blue);
+    }
+
+    .theme-toggle svg { width: 16px; height: 16px; display: block; }
 
     /* ── RESPONSIVE ───────────────────────────────────────── */
     @media (max-width: 960px) {
@@ -694,17 +812,15 @@
   <nav>
     <a href="#" class="nav-brand">
       <!-- BD logo — inline SVG matching the uploaded logo exactly -->
-      <svg class="bd-logo-svg" width="38" height="38" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <svg class="bd-logo-svg" width="48" height="38" viewBox="0 0 126 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="navGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%"   stop-color="#1A3A6C"/>
-            <stop offset="35%"  stop-color="#2B78BE"/>
-            <stop offset="68%"  stop-color="#4BBDB5"/>
-            <stop offset="100%" stop-color="#C9B87A"/>
+            <stop offset="0%"   stop-color="#1e3a8a"/>
+            <stop offset="50%"  stop-color="#1D4ED8"/>
+            <stop offset="100%" stop-color="#60A5FA"/>
           </linearGradient>
         </defs>
-        <!-- B -->
-        <text x="2" y="72" font-family="Nunito, sans-serif" font-weight="900" font-size="72" fill="url(#navGrad)">BD</text>
+        <text x="2" y="72" font-family="Playfair Display, serif" font-weight="900" font-size="72" fill="url(#navGrad)">BD</text>
       </svg>
       <span class="nav-brand-text">
         <span class="b1">Brewski</span> <span class="b2">Designs</span>
@@ -716,6 +832,18 @@
       <li><a href="#process">Process</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="#contact" class="btn-nav">Let's Talk</a></li>
+      <li>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <!-- Moon icon (shown in light mode) -->
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+          </svg>
+          <!-- Sun icon (shown in dark mode) -->
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+      </li>
     </ul>
   </nav>
 
@@ -739,29 +867,27 @@
           <svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="heroGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%"   stop-color="#1A3A6C"/>
-                <stop offset="33%"  stop-color="#2B78BE"/>
-                <stop offset="66%"  stop-color="#4BBDB5"/>
-                <stop offset="100%" stop-color="#C9B87A"/>
+                <stop offset="0%"   stop-color="#1e3a8a"/>
+                <stop offset="50%"  stop-color="#1D4ED8"/>
+                <stop offset="100%" stop-color="#60A5FA"/>
               </linearGradient>
               <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"   stop-color="#1A3A6C"/>
-                <stop offset="40%"  stop-color="#2B78BE"/>
-                <stop offset="70%"  stop-color="#4BBDB5"/>
-                <stop offset="100%" stop-color="#C9B87A"/>
+                <stop offset="0%"   stop-color="#1e3a8a"/>
+                <stop offset="50%"  stop-color="#1D4ED8"/>
+                <stop offset="100%" stop-color="#60A5FA"/>
               </linearGradient>
             </defs>
             <!-- BD monogram -->
             <text x="30" y="240"
-              font-family="Nunito, sans-serif"
+              font-family="Playfair Display, serif"
               font-weight="900"
               font-size="220"
               fill="url(#heroGrad)"
               letter-spacing="-8">BD</text>
             <!-- Brewski Designs wordmark -->
             <text x="30" y="308"
-              font-family="Nunito, sans-serif"
-              font-weight="800"
+              font-family="Playfair Display, serif"
+              font-weight="700"
               font-size="42"
               fill="url(#textGrad)"
               letter-spacing="1">Brewski Designs</text>
@@ -788,71 +914,41 @@
     </div>
   </section>
 
-  <!-- ── SERVICES ─────────────────────────────────────────── -->
+  <!-- ── ABOUT / STORY ─────────────────────────────────────── -->
   <section id="services">
     <div class="section-header">
-      <div class="section-label">What I Do</div>
-      <h2 class="section-title">Services that <span class="grad-text">deliver.</span></h2>
-      <p class="section-sub">Every project is built from scratch around your goals — clean, fast web design that actually works for your business.</p>
+      <!-- EDIT: Change the label, title and subtitle below -->
+      <div class="section-label">Who I Am</div>
+      <h2 class="section-title">The story <span class="grad-text">behind the work.</span></h2>
+      <p class="section-sub">A little about me, how I got here, and what drives the work I do for every client.</p>
     </div>
-    <div class="services-grid">
 
-      <div class="service-card">
-        <div class="svc-num">01</div>
-        <div class="svc-icon">🖥️</div>
-        <h3>Website Design</h3>
-        <p>Custom websites designed from scratch to impress your visitors and convert them into customers. Built to load fast and look great on every device.</p>
-        <ul class="svc-list">
-          <li>Custom UI/UX design</li>
-          <li>Mobile-first responsive layouts</li>
-          <li>Landing pages &amp; full multi-page sites</li>
-          <li>E-commerce &amp; product pages</li>
-          <li>Fast performance &amp; SEO-ready structure</li>
-        </ul>
+    <div class="about-card">
+      <div class="about-left">
+        <!-- EDIT: Change the heading below -->
+        <h3>Hi, I'm <span>Ethan.</span></h3>
+
+        <p>From a young age, I've always known I wanted to create something meaningful—both for myself and for others. As I've grown, I've realised that the best way to bring that passion to life is through web design.</p>
+        <p>Based in Lincolnshire, I help businesses both locally and further afield stay competitive and compelling in a fast-moving digital world, where a strong online presence directly drives market dominance and sustained business growth.</p>
+        <p>Supporting local businesses is at the heart of what I do. I take pride in ensuring every brand I work with feels complete, confident, and professionally represented, with each client receiving dedicated support and genuine care throughout the process.</p>
       </div>
 
-      <div class="service-card">
-        <div class="svc-num">02</div>
-        <div class="svc-icon">📐</div>
-        <h3>UX &amp; Redesign</h3>
-        <p>Got an existing site that isn't working hard enough? I'll audit, redesign, and improve the experience — turning a dated website into one that performs.</p>
-        <ul class="svc-list">
-          <li>UX audit &amp; heatmap review</li>
-          <li>Full visual redesign</li>
-          <li>Conversion rate optimisation</li>
-          <li>Accessibility improvements</li>
-          <li>Speed &amp; performance overhaul</li>
-        </ul>
+      <div class="about-right">
+        <div class="about-image-box">
+          <img src="santorini.jpg" alt="Santorini" />
+          <div class="about-stats-row">
+            <!-- EDIT: Change the numbers and labels in each stat box -->
+            <div class="about-stat">
+              <span class="stat-val">100%</span>
+              <span class="stat-label">Custom Built</span>
+            </div>
+            <div class="about-stat">
+              <span class="stat-val">UK</span>
+              <span class="stat-label">Based</span>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="service-card">
-        <div class="svc-num">03</div>
-        <div class="svc-icon">📱</div>
-        <h3>Landing Pages</h3>
-        <p>Single-page sites built to convert — for product launches, ad campaigns, or lead generation. Designed to focus attention and drive one clear action.</p>
-        <ul class="svc-list">
-          <li>High-conversion layouts</li>
-          <li>A/B testing-ready structure</li>
-          <li>Fast build turnaround</li>
-          <li>Lead capture &amp; form integration</li>
-          <li>Analytics setup</li>
-        </ul>
-      </div>
-
-      <div class="service-card">
-        <div class="svc-num">04</div>
-        <div class="svc-icon">🛒</div>
-        <h3>E-Commerce Design</h3>
-        <p>Online stores designed to sell. Whether you're launching or revamping, I design intuitive, trustworthy shopping experiences that boost revenue.</p>
-        <ul class="svc-list">
-          <li>Product &amp; collection page design</li>
-          <li>Checkout flow optimisation</li>
-          <li>Shopify &amp; WooCommerce design</li>
-          <li>Mobile shopping experience</li>
-          <li>Trust &amp; conversion elements</li>
-        </ul>
-      </div>
-
     </div>
   </section>
 
@@ -938,40 +1034,27 @@
         <p class="section-sub">Have a project in mind? Fill in the form and I'll get back to you within 24 hours — no obligation, just a conversation.</p>
       </div>
       <div class="contact-form">
-        <form>
+        <form action="https://formspree.io/f/xvzvelaw" method="POST">
           <div class="form-row">
             <div class="form-group">
               <label for="name">Your Name</label>
-              <input type="text" id="name" placeholder="Jane Smith" />
+              <input type="text" id="name" placeholder="Example Name" />
             </div>
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" placeholder="jane@yourbusiness.com" />
+              <input type="email" id="email" placeholder="example@yourbusiness.com" />
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="budget">Budget Range</label>
-              <select id="budget">
-                <option value="">Select a range…</option>
-                <option>Under £500</option>
-                <option>£500 – £1,000</option>
-                <option>£1,000 – £2,500</option>
-                <option>£2,500 – £5,000</option>
-                <option>£5,000+</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="service">Service Needed</label>
-              <select id="service">
-                <option value="">Select a service…</option>
-                <option>New Website</option>
-                <option>Website Redesign</option>
-                <option>Landing Page</option>
-                <option>E-Commerce Design</option>
-                <option>Not Sure Yet</option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label for="budget">Budget Range</label>
+            <select id="budget">
+              <option value="">Select a range…</option>
+              <option>Under £500</option>
+              <option>£500 – £1,000</option>
+              <option>£1,000 – £2,500</option>
+              <option>£2,500 – £5,000</option>
+              <option>£5,000+</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="message">Tell Me About Your Project</label>
@@ -986,22 +1069,21 @@
   <!-- ── FOOTER ────────────────────────────────────────────── -->
   <footer>
     <a href="#" class="nav-brand">
-      <svg width="30" height="30" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <svg width="38" height="30" viewBox="0 0 126 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="ftGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#1A3A6C"/>
-            <stop offset="35%" stop-color="#2B78BE"/>
-            <stop offset="68%" stop-color="#4BBDB5"/>
-            <stop offset="100%" stop-color="#C9B87A"/>
+            <stop offset="0%"   stop-color="#60A5FA"/>
+            <stop offset="50%"  stop-color="#93C5FD"/>
+            <stop offset="100%" stop-color="#BFDBFE"/>
           </linearGradient>
         </defs>
-        <text x="2" y="72" font-family="Nunito,sans-serif" font-weight="900" font-size="72" fill="url(#ftGrad)">BD</text>
+        <text x="2" y="72" font-family="Playfair Display,serif" font-weight="900" font-size="72" fill="url(#ftGrad)">BD</text>
       </svg>
       <span class="nav-brand-text" style="font-size:1rem;">
         <span class="b1">Brewski</span> <span class="b2">Designs</span>
       </span>
     </a>
-    <p>&copy; 2025 Brewski Designs. All rights reserved.</p>
+    <p>&copy; 2026 Brewski Designs. All rights reserved.</p>
     <ul class="footer-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#portfolio">Work</a></li>
@@ -1009,5 +1091,35 @@
     </ul>
   </footer>
 
+  <script>
+    const html        = document.documentElement;
+    const toggleBtn   = document.getElementById('theme-toggle');
+    const iconMoon    = document.getElementById('icon-moon');
+    const iconSun     = document.getElementById('icon-sun');
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        html.setAttribute('data-theme', 'dark');
+        iconMoon.style.display = 'none';
+        iconSun.style.display  = 'block';
+      } else {
+        html.removeAttribute('data-theme');
+        iconMoon.style.display = 'block';
+        iconSun.style.display  = 'none';
+      }
+    }
+
+    // Respect OS preference on first visit
+    const saved = localStorage.getItem('bd-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+
+    toggleBtn.addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      const next   = isDark ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem('bd-theme', next);
+    });
+  </script>
 </body>
 </html>
