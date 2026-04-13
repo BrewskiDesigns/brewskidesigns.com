@@ -57,9 +57,8 @@
 
     /* Smooth theme transitions */
     body, nav, section, footer,
-    .about-card, .project-card, .contact-form,
+    .about-card, .project-card,
     .float-card, .about-stat, .step-num,
-    .form-group input, .form-group select, .form-group textarea,
     .hero-logo-wrap {
       transition: background .3s, background-color .3s, border-color .3s, color .3s, box-shadow .3s;
     }
@@ -660,76 +659,6 @@
     .contact-wrap .section-header { margin-bottom: 2.5rem; }
     .contact-wrap .section-sub { margin: 0 auto; }
 
-    .contact-form {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 3rem;
-      text-align: left;
-      margin-top: 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Gradient top border */
-    .contact-form::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--grad);
-    }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
-    .form-group { margin-bottom: 1.1rem; }
-
-    .form-group label {
-      display: block;
-      font-size: .78rem;
-      font-weight: 700;
-      color: var(--muted);
-      margin-bottom: .45rem;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      font-family: 'Lora', serif;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: .78rem 1rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      font-family: 'Lora', serif;
-      font-size: .92rem;
-      color: var(--text);
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    .form-group input::placeholder,
-    .form-group textarea::placeholder { color: rgba(74,96,122,.45); }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: rgba(29,78,216,.45);
-      box-shadow: 0 0 0 3px rgba(29,78,216,.07);
-    }
-
-    .form-group select option { background: var(--white); color: var(--text); }
-    .form-group textarea { resize: vertical; min-height: 130px; }
-
-    .btn-submit {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      border-radius: 2px;
-      margin-top: .5rem;
-      box-shadow: 0 6px 28px rgba(29,78,216,.18);
-    }
 
     /* ── FOOTER ───────────────────────────────────────────── */
     footer {
@@ -758,7 +687,6 @@
     [data-theme="dark"] .pt-3 { background: linear-gradient(135deg, #0a1c38, #164E7A); color: #93C5FD; }
 
     [data-theme="dark"] .about-card { background: var(--bg-card); }
-    [data-theme="dark"] .contact-form { background: var(--bg-card); }
     [data-theme="dark"] .step-num { background: var(--bg-card); }
     [data-theme="dark"] .project-card { background: var(--bg-card); }
     [data-theme="dark"] .hero-logo-wrap { background: var(--bg-card); }
@@ -864,7 +792,7 @@
       <div class="hero-visual">
         <!-- Large logo centrepiece -->
         <div class="hero-logo-wrap">
-          <svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 -40 420 400" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="heroGrad" x1="0%" y1="100%" x2="100%" y2="0%">
                 <stop offset="0%"   stop-color="#1e3a8a"/>
@@ -1031,38 +959,11 @@
       <div class="section-header">
         <div class="section-label">Get In Touch</div>
         <h2 class="section-title">Let's build something <span class="grad-text">great.</span></h2>
-        <p class="section-sub">Have a project in mind? Fill in the form and I'll get back to you within 24 hours — no obligation, just a conversation.</p>
+        <p class="section-sub">Have a project in mind? Drop me an email and I'll get back to you within 24 hours — no obligation, just a conversation.</p>
       </div>
-      <div class="contact-form">
-        <form action="https://formspree.io/f/xvzvelaw" method="POST">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">Your Name</label>
-              <input type="text" id="name" placeholder="Example Name" />
-            </div>
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" placeholder="example@yourbusiness.com" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="budget">Budget Range</label>
-            <select id="budget">
-              <option value="">Select a range…</option>
-              <option>Under £500</option>
-              <option>£500 – £1,000</option>
-              <option>£1,000 – £2,500</option>
-              <option>£2,500 – £5,000</option>
-              <option>£5,000+</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="message">Tell Me About Your Project</label>
-            <textarea id="message" placeholder="What are you building? Who is it for? Any inspiration or examples you like?"></textarea>
-          </div>
-          <button type="submit" class="btn-primary btn-submit">Send Message &rarr;</button>
-        </form>
-      </div>
+      <a href="mailto:ethan@brewskidesigns.com" class="btn-primary" style="display:inline-block;margin-top:1.5rem;font-size:1.1rem;padding:.9rem 2.2rem;">
+        ethan@brewskidesigns.com &rarr;
+      </a>
     </div>
   </section>
 
