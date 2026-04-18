@@ -3,12 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brewski Designs — Web Design</title>
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Primary SEO -->
+  <title>Brewski Designs — Custom Web Design for UK Businesses</title>
+  <meta name="description" content="Brewski Designs crafts bold, fast, custom websites for UK businesses. 100% custom-built — no templates. Starter, Standard & Premium packages from £175." />
+  <meta name="keywords" content="web design, website design, UK web designer, Lincolnshire web design, custom website, small business website, bespoke web design, Brewski Designs" />
+  <meta name="author" content="Ethan Brewer" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://brewskidesigns.com/" />
+
+  <!-- Open Graph (Facebook, LinkedIn, iMessage, etc.) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://brewskidesigns.com/" />
+  <meta property="og:title" content="Brewski Designs — Custom Web Design for UK Businesses" />
+  <meta property="og:description" content="Bold, fast, custom websites for UK businesses. No templates, no compromises. Starter, Standard & Premium packages from £175." />
+  <meta property="og:image" content="https://brewskidesigns.com/favicon_io/android-chrome-512x512.png" />
+  <meta property="og:site_name" content="Brewski Designs" />
+  <meta property="og:locale" content="en_GB" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Brewski Designs — Custom Web Design for UK Businesses" />
+  <meta name="twitter:description" content="Bold, fast, custom websites for UK businesses. No templates, no compromises. Packages from £175." />
+  <meta name="twitter:image" content="https://brewskidesigns.com/favicon_io/android-chrome-512x512.png" />
+
+  <!-- Theme colour for mobile browser chrome -->
+  <meta name="theme-color" content="#1D4ED8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#090F1D" media="(prefers-color-scheme: dark)" />
+
+  <!-- Structured data: Local business -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Brewski Designs",
+    "description": "Custom web design service for UK businesses.",
+    "url": "https://brewskidesigns.com/",
+    "email": "ethan@brewskidesigns.com",
+    "founder": { "@type": "Person", "name": "Ethan Brewer" },
+    "areaServed": { "@type": "Country", "name": "United Kingdom" },
+    "address": { "@type": "PostalAddress", "addressRegion": "Lincolnshire", "addressCountry": "GB" },
+    "priceRange": "££",
+    "image": "https://brewskidesigns.com/favicon_io/android-chrome-512x512.png",
+    "sameAs": []
+  }
+  </script>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="favicon_io/site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -552,8 +596,18 @@
 
     .portfolio-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1.25rem;
+    }
+
+    .portfolio-note {
+      max-width: 720px;
+      margin: 0 auto 2.5rem;
+      text-align: center;
+      font-family: 'Lora', serif;
+      font-size: .85rem;
+      color: var(--muted);
+      font-style: italic;
     }
 
     .project-card {
@@ -581,6 +635,31 @@
       letter-spacing: -.04em;
       position: relative;
       overflow: hidden;
+      background: #f3f4f6;
+    }
+
+    .project-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .example-badge {
+      position: absolute;
+      top: .6rem;
+      left: .6rem;
+      background: rgba(15, 23, 42, .85);
+      color: #fff;
+      font-family: 'Lora', serif;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: .3rem .55rem;
+      border-radius: 2px;
+      z-index: 2;
     }
 
     .project-thumb::after {
@@ -656,6 +735,219 @@
 
     .step h3 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: .5rem; }
     .step p { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── PRICING ──────────────────────────────────────────── */
+    #pricing { background: var(--bg-2); }
+
+    #pricing .section-sub { max-width: 780px; text-wrap: balance; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .price-card {
+      position: relative;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 2.5rem 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      overflow: hidden;
+    }
+
+    [data-theme="dark"] .price-card { background: var(--bg-card); }
+
+    .price-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(29,78,216,.1);
+      border-color: rgba(29,78,216,.35);
+    }
+
+    .price-card.featured {
+      border-color: rgba(29,78,216,.45);
+      box-shadow: 0 18px 50px rgba(29,78,216,.12);
+    }
+
+    .price-card.featured::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--grad);
+    }
+
+    .price-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--grad);
+      color: var(--white);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .3rem .7rem;
+      border-radius: 2px;
+      font-family: 'Lora', serif;
+    }
+
+    .price-tier {
+      font-family: 'Lora', serif;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: .75rem;
+    }
+
+    .price-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+    }
+
+    .price-desc {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+    }
+
+    .price-amount-row {
+      display: flex;
+      align-items: baseline;
+      gap: .6rem;
+      flex-wrap: wrap;
+      margin-bottom: .5rem;
+    }
+
+    .price-amount-row.monthly {
+      margin-bottom: 1.75rem;
+    }
+
+    .price-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -.03em;
+      line-height: 1;
+    }
+
+    .price-amount-row.monthly .price-amount {
+      font-size: 1.5rem;
+      color: var(--muted);
+    }
+
+    .price-amount-row.monthly .price-amount .grad-text {
+      background: none;
+      -webkit-text-fill-color: var(--text);
+      color: var(--text);
+    }
+
+    .price-amount .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .price-amount-note {
+      font-size: .78rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .price-period {
+      font-family: 'Lora', serif;
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-left: -.25rem;
+    }
+
+    .price-features {
+      list-style: none;
+      margin: 0 0 2rem 0;
+      padding: 1.5rem 0 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+      flex-grow: 1;
+    }
+
+    .price-features li {
+      font-size: .88rem;
+      color: var(--text);
+      padding-left: 1.6rem;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .price-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--blue);
+      font-weight: 900;
+      font-size: .95rem;
+    }
+
+    .price-btn {
+      display: block;
+      text-align: center;
+      background: var(--blue);
+      color: var(--white);
+      font-family: 'Lora', serif;
+      font-size: .92rem;
+      font-weight: 700;
+      padding: .85rem 1.4rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: opacity .2s, transform .15s;
+      box-shadow: 0 6px 24px rgba(29,78,216,.2);
+    }
+
+    .price-btn:hover { opacity: .88; transform: translateY(-2px); }
+
+    .price-btn.ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(29,78,216,.3);
+      box-shadow: none;
+    }
+
+    .price-btn.ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+    .pricing-note {
+      text-align: center;
+      margin-top: 2.5rem;
+      font-size: .88rem;
+      color: var(--muted);
+      margin-left: auto;
+      margin-right: auto;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 720px) {
+      .pricing-note { white-space: normal; max-width: 420px; }
+    }
+
+    @media (max-width: 960px) {
+      .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
+    }
 
     /* ── CONTACT ──────────────────────────────────────────── */
     #contact { background: var(--bg); padding: 6rem 5%; }
@@ -772,6 +1064,7 @@
       <li><a href="#services">Services</a></li>
       <li><a href="#portfolio">Work</a></li>
       <li><a href="#process">Process</a></li>
+      <li><a href="#pricing">Pricing</a></li>
       <li><a href="#contact" class="btn-nav">Contact</a></li>
       <li>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
@@ -797,7 +1090,7 @@
         <h1>Websites that <span class="grad-text">stand out.</span></h1>
         <p>Brewski Designs crafts bold, fast, custom websites for businesses that want to make a real impression. No templates. No compromises. Just design that works.</p>
         <div class="hero-btns">
-          <a href="#contact" class="btn-primary">Start a Project</a>
+          <a href="#pricing" class="btn-primary">Start a Project</a>
           <a href="#contact" class="btn-ghost">Get In Touch</a>
         </div>
       </div>
@@ -896,42 +1189,64 @@
   <!-- ── PORTFOLIO ────────────────────────────────────────── -->
   <section id="portfolio">
     <div class="section-header">
-      <div class="section-label">Recent Work</div>
-      <h2 class="section-title">Projects I'm <span class="grad-text">proud of.</span></h2>
-      <p class="section-sub">Projects coming soon — get in touch to discuss yours.</p>
+      <div class="section-label">Example Designs</div>
+      <h2 class="section-title">A taste of what's <span class="grad-text">possible.</span></h2>
+      <p class="section-sub">These are concept designs I've built to showcase my range across different industries. Your site will be designed from scratch around your brand and goals.</p>
     </div>
+    <p class="portfolio-note">Examples only — not real client work.</p>
     <div class="portfolio-grid">
 
       <div class="project-card">
-        <div class="project-thumb pt-1" style="display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:1.1rem;color:rgba(255,255,255,.5);letter-spacing:.05em;">Coming soon...</div>
+        <div class="project-thumb">
+          <span class="example-badge">Example</span>
+          <img src="example-hartwell.png" alt="Hartwell &amp; Sons builders website example" loading="lazy">
+        </div>
         <div class="project-info">
-          <div class="project-tag">Web Design</div>
-          <h3>Coming soon...</h3>
-          <p>Portfolio projects will be listed here shortly.</p>
+          <div class="project-tag">Trade / Construction</div>
+          <h3>Hartwell &amp; Sons</h3>
+          <p>A grounded, trustworthy site for a family-run building firm — clear services, easy quote requests, and years of craft front and centre.</p>
         </div>
       </div>
 
       <div class="project-card">
-        <div class="project-thumb pt-2" style="display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:1.1rem;color:rgba(255,255,255,.5);letter-spacing:.05em;">Coming soon...</div>
+        <div class="project-thumb">
+          <span class="example-badge">Example</span>
+          <img src="example-bloom.png" alt="Bloom &amp; Petal beauty salon website example" loading="lazy">
+        </div>
         <div class="project-info">
-          <div class="project-tag">Web Design</div>
-          <h3>Coming soon...</h3>
-          <p>Portfolio projects will be listed here shortly.</p>
+          <div class="project-tag">Beauty / Salon</div>
+          <h3>Bloom &amp; Petal</h3>
+          <p>A soft, feminine design for a beauty salon — showcasing treatments, stylists, and an easy path for clients to book online.</p>
         </div>
       </div>
 
       <div class="project-card">
-        <div class="project-thumb pt-3" style="display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:1.1rem;color:rgba(255,255,255,.5);letter-spacing:.05em;">Coming soon...</div>
+        <div class="project-thumb">
+          <span class="example-badge">Example</span>
+          <img src="example-bigrig.png" alt="Big Rig Burgers food truck website example" loading="lazy">
+        </div>
         <div class="project-info">
-          <div class="project-tag">Web Design</div>
-          <h3>Coming soon...</h3>
-          <p>Portfolio projects will be listed here shortly.</p>
+          <div class="project-tag">Food &amp; Drink</div>
+          <h3>Big Rig Burgers</h3>
+          <p>A bold, punchy landing page for a food truck — menu, upcoming locations, and event bookings all on one scrollable homepage.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb">
+          <span class="example-badge">Example</span>
+          <img src="example-meridian.png" alt="Meridian Ledger accountants website example" loading="lazy">
+        </div>
+        <div class="project-info">
+          <div class="project-tag">Professional Services</div>
+          <h3>Meridian Ledger</h3>
+          <p>A clean, confident site for an accountancy firm — professional tone, clear service tiers, and an effortless route to a first consultation.</p>
         </div>
       </div>
 
     </div>
     <div class="portfolio-cta">
-      <a href="#contact" class="btn-ghost">Start your project &rarr;</a>
+      <a href="#pricing" class="btn-ghost">Start your project &rarr;</a>
     </div>
   </section>
 
@@ -979,6 +1294,96 @@
         ethan@brewskidesigns.com &rarr;
       </a>
     </div>
+  </section>
+
+  <!-- ── PRICING ───────────────────────────────────────────── -->
+  <section id="pricing">
+    <div class="section-header">
+      <div class="section-label">Transparent Pricing</div>
+      <h2 class="section-title">Simple, <span class="grad-text">honest pricing.</span></h2>
+      <p class="section-sub">Pick the package that fits your business and pay securely through my trusted partner, Stripe. Once payment is received, I'll email you to get the project started. Got questions before you commit? Feel free to email me any time.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- STARTER -->
+      <div class="price-card">
+        <div class="price-tier">Starter</div>
+        <div class="price-name">Launch Pad</div>
+        <p class="price-desc">Perfect for small businesses needing a sharp online presence — fast.</p>
+        <div class="price-amount-row">
+          <div class="price-amount">£<span class="grad-text">175</span></div>
+          <div class="price-amount-note">One-time build fee</div>
+        </div>
+        <div class="price-amount-row monthly">
+          <div class="price-amount">then £<span class="grad-text">25</span><span class="price-period">/m</span></div>
+          <div class="price-amount-note">First month included</div>
+        </div>
+        <ul class="price-features">
+          <li>1–2 custom pages</li>
+          <li>Mobile responsive design</li>
+          <li>Contact form & basic SEO</li>
+          <li>2–3 week turnaround</li>
+          <li>Launch & deployment included</li>
+        </ul>
+        <!-- STRIPE_LINK_STARTER -->
+        <a href="https://buy.stripe.com/9B69AT2kE2CubrtcudbV601" class="price-btn ghost" data-stripe="starter" target="_blank" rel="noopener">Get Started &rarr;</a>
+      </div>
+
+      <!-- STANDARD (featured) -->
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-tier">Standard</div>
+        <div class="price-name">Business</div>
+        <p class="price-desc">The sweet spot — a complete website with room to grow your brand online.</p>
+        <div class="price-amount-row">
+          <div class="price-amount">£<span class="grad-text">280</span></div>
+          <div class="price-amount-note">One-time build fee</div>
+        </div>
+        <div class="price-amount-row monthly">
+          <div class="price-amount">then £<span class="grad-text">35</span><span class="price-period">/m</span></div>
+          <div class="price-amount-note">First month included</div>
+        </div>
+        <ul class="price-features">
+          <li>3–4 custom pages</li>
+          <li>Mobile responsive design</li>
+          <li>Contact form & enhanced SEO</li>
+          <li>Dark mode & smooth animations</li>
+          <li>2–4 week turnaround</li>
+          <li>Launch & deployment included</li>
+        </ul>
+        <!-- STRIPE_LINK_STANDARD -->
+        <a href="https://buy.stripe.com/4gM4gz8J2dh88fh0LvbV603" class="price-btn" data-stripe="standard" target="_blank" rel="noopener">Get Started &rarr;</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="price-card">
+        <div class="price-tier">Premium</div>
+        <div class="price-name">Full Suite</div>
+        <p class="price-desc">For businesses that want to make a serious statement online.</p>
+        <div class="price-amount-row">
+          <div class="price-amount">£<span class="grad-text">450</span></div>
+          <div class="price-amount-note">One-time build fee</div>
+        </div>
+        <div class="price-amount-row monthly">
+          <div class="price-amount">then £<span class="grad-text">50</span><span class="price-period">/m</span></div>
+          <div class="price-amount-note">First month included</div>
+        </div>
+        <ul class="price-features">
+          <li>5–6 custom pages</li>
+          <li>Mobile responsive design</li>
+          <li>Advanced SEO optimisation</li>
+          <li>Dark mode & custom animations</li>
+          <li>Priority revisions (24–48h)</li>
+          <li>3–5 week turnaround</li>
+          <li>Launch & 30 days post-launch support</li>
+        </ul>
+        <!-- STRIPE_LINK_PREMIUM -->
+        <a href="https://buy.stripe.com/7sYdR94sMcd4gLNdyhbV602" class="price-btn ghost" data-stripe="premium" target="_blank" rel="noopener">Get Started &rarr;</a>
+      </div>
+
+    </div>
+
   </section>
 
   <!-- ── FOOTER ────────────────────────────────────────────── -->
