@@ -232,6 +232,17 @@
   #w-tourposter.max .content{ display:flex; align-items:center; justify-content:center }
   #w-tourposter.max .poster-img{ max-height:100%; max-width:100%; margin:0 }
 
+  /* ---- phone: keep windows on-screen, tighten icons (desktop unaffected) ---- */
+  @media (max-width:640px){
+    .window{ min-width:0; max-width:96vw; }
+    .startmenu{ width:min(240px,74vw); }
+    .dicon{ width:96px; }
+    .dicon .ico{ width:52px; height:52px; }
+    .dicon .lbl{ font-size:11px; }
+    .taskbtn{ max-width:96px; }
+    .mp-controls{ gap:22px; }
+  }
+
   @media (prefers-reduced-motion:reduce){ .base{ clip-path:none; animation:none; } }
 </style>
 </head>
@@ -533,9 +544,10 @@
     return !(r1.right<r2.left || r1.left>r2.right || r1.bottom<r2.top || r1.top>r2.bottom); }
 
   // 12-across x 7-down grid (pad keeps the bottom row off the taskbar)
-  const GCOLS=12, GROWS=7, GPAD=44;
+  const GROWS=7, GPAD=44;
+  function gcols(){ return innerWidth<=640 ? 2 : 12; }   // 2 icon columns on phones, 12 on desktop
   function placeAtCell(ic, col, row, animate){
-    const cellW=innerWidth/GCOLS, cellH=(innerHeight-GPAD)/GROWS;
+    const GCOLS=gcols(), cellW=innerWidth/GCOLS, cellH=(innerHeight-GPAD)/GROWS;
     ic._tx = (col+0.5)*cellW - ic.offsetWidth/2;
     ic._ty = (row+0.5)*cellH - ic.offsetHeight/2;
     ic.dataset.col=col; ic.dataset.row=row;
@@ -547,6 +559,7 @@
       return o!==ignore && +o.dataset.col===col && +o.dataset.row===row; });
   }
   function snapToGrid(ic){
+    const GCOLS=gcols();
     const r=ic.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2;
     const cellW=innerWidth/GCOLS, cellH=(innerHeight-GPAD)/GROWS;
     const col=Math.min(GCOLS-1, Math.max(0, Math.round(cx/cellW-0.5)));
@@ -716,20 +729,24 @@
         if(ic.dataset.href){ window.open(ic.dataset.href, '_blank', 'noopener'); }
         else if(ic.dataset.win==='w-video'){               // Videos: music video above Extras, no overlap
           openWin('w-extras'); openWin('w-video');
-          const v=document.getElementById('w-video'), e=document.getElementById('w-extras');
-          const gap=16, cx=innerWidth/2, totalH=v.offsetHeight+gap+e.offsetHeight;
-          const sy=Math.max(8, Math.round((innerHeight-32-totalH)/2));
-          v.style.left=Math.round(cx-v.offsetWidth/2)+'px'; v.style.top=sy+'px';
-          e.style.left=Math.round(cx-e.offsetWidth/2)+'px'; e.style.top=(sy+v.offsetHeight+gap)+'px';
+          if(innerWidth>640){                              // desktop layout only
+            const v=document.getElementById('w-video'), e=document.getElementById('w-extras');
+            const gap=16, cx=innerWidth/2, totalH=v.offsetHeight+gap+e.offsetHeight;
+            const sy=Math.max(8, Math.round((innerHeight-32-totalH)/2));
+            v.style.left=Math.round(cx-v.offsetWidth/2)+'px'; v.style.top=sy+'px';
+            e.style.left=Math.round(cx-e.offsetWidth/2)+'px'; e.style.top=(sy+v.offsetHeight+gap)+'px';
+          }
         }
         else if(ic.dataset.win==='w-net'){                 // Tour: globe + poster, side by side (no overlap), random spot
           openWin('w-tourposter'); openWin('w-net');
-          const g=document.getElementById('w-net'), pp=document.getElementById('w-tourposter');
-          const gap=22, totalW=pp.offsetWidth+gap+g.offsetWidth, maxH=Math.max(pp.offsetHeight,g.offsetHeight);
-          const sx=Math.round(8+Math.random()*Math.max(0, innerWidth-totalW-16));
-          const sy=Math.round(8+Math.random()*Math.max(0, innerHeight-32-maxH-16));
-          pp.style.left=sx+'px'; pp.style.top=sy+'px';
-          g.style.left=(sx+pp.offsetWidth+gap)+'px'; g.style.top=sy+'px';
+          if(innerWidth>640){                              // desktop layout only
+            const g=document.getElementById('w-net'), pp=document.getElementById('w-tourposter');
+            const gap=22, totalW=pp.offsetWidth+gap+g.offsetWidth, maxH=Math.max(pp.offsetHeight,g.offsetHeight);
+            const sx=Math.round(8+Math.random()*Math.max(0, innerWidth-totalW-16));
+            const sy=Math.round(8+Math.random()*Math.max(0, innerHeight-32-maxH-16));
+            pp.style.left=sx+'px'; pp.style.top=sy+'px';
+            g.style.left=(sx+pp.offsetWidth+gap)+'px'; g.style.top=sy+'px';
+          }
         }
         else openWin(ic.dataset.win);
         return;

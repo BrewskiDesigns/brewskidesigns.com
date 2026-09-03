@@ -136,6 +136,15 @@ body.revealed a.logo { pointer-events: auto; cursor: pointer; }
   .floater { width: 40vw !important; }
   .floater--15 { width: 16vw !important; margin-left: -8vw !important; }
   .title { white-space: normal; }
+
+  /* phone: stack the three portal logos vertically, centred + tappable, no overlap */
+  .logo { left: 50% !important; right: auto !important; width: 34vw !important; margin-left: -17vw !important; }
+  .logo--frendz { width: 46vw !important; margin-left: -23vw !important; }
+  .logo--choc   { top: 88vh; }
+  .logo--frendz { top: 110vh; }
+  .logo--bd     { top: 134vh; }
+  /* hide the decorative rings on phones so the logos read cleanly */
+  .mini { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
