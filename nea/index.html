@@ -123,9 +123,11 @@
   .taskbar{height:34px; border:0;
     background:linear-gradient(180deg,#3f8cf3 0%,#2b73e0 9%,#1e5fd0 46%,#2159c6 90%,#164bb0 100%);
     box-shadow:inset 0 1px rgba(255,255,255,.45)}
-  .start{border:0; border-radius:0 11px 11px 0; padding:2px 16px 2px 8px; color:#fff; font-style:italic;
+  .start{border:0; border-radius:0; padding:2px 18px; color:#fff; font-style:italic;
     text-shadow:1px 1px 1px rgba(0,0,0,.4); box-shadow:inset 0 1px rgba(255,255,255,.5);
     background:linear-gradient(180deg,#8ad86f 0%,#4bad3a 55%,#2f8a27 100%)}
+  #caution-btn{cursor:pointer; padding:2px 6px; display:flex; align-items:center}
+  #caution-btn img{width:18px; height:18px; display:block; image-rendering:auto}
   .start .logo{background:radial-gradient(circle at 40% 35%,#fff,#dfe8ff)}
   .taskbtn{color:#fff; border:1px solid #16469e; border-radius:3px;
     background:linear-gradient(#5a9bf0,#2e6fd0); box-shadow:inset 0 1px rgba(255,255,255,.35)}
@@ -419,10 +421,19 @@
       </div>
     </div>
 
+    <div class="window raised" id="w-legal" style="width:390px">
+      <div class="titlebar"><span class="t">Notice</span></div>
+      <div class="content">
+        <div style="line-height:1.55">This site is a student <b>Media Studies NEA</b>, made for educational purposes only. It is entirely <b>non-commercial</b> — nothing here is for sale and no profits are made.<br><br>The song “Deep Fried Frendz” and all rights to it belong to <b>MF DOOM</b>. All artwork, merchandise and store content are mock-ups created for this project, and no ownership or affiliation is claimed.</div>
+        <div style="text-align:center; margin-top:16px"><span class="btn raised" data-close>OK</span></div>
+      </div>
+    </div>
+
     <!-- taskbar -->
     <div class="taskbar raised">
-      <div class="start raised" id="startbtn"><span class="logo"></span>Start</div>
+      <div class="start raised" id="startbtn">Start</div>
       <div class="tasks" id="tasks"></div>
+      <div class="tray raised" id="caution-btn" title="Notice"><img src="caution.png" alt="Notice"></div>
       <div class="tray raised" id="clock">--:--</div>
     </div>
 
@@ -1095,6 +1106,17 @@
       sw.style.top =Math.max(0,(innerHeight-sw.offsetHeight)/2)+'px';
     });
   });
+
+  /* ---- caution button (by the clock) → NEA / rights notice ---- */
+  (function(){
+    const cb=document.getElementById('caution-btn'); if(!cb) return;
+    cb.addEventListener('click', function(){
+      openWin('w-legal');
+      const lw=document.getElementById('w-legal');
+      lw.style.left=Math.max(0,(innerWidth-lw.offsetWidth)/2)+'px';
+      lw.style.top =Math.max(0,(innerHeight-lw.offsetHeight)/2)+'px';
+    });
+  })();
 </script>
 </body>
 </html>
