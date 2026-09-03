@@ -297,6 +297,18 @@
       </div>
     </div>
 
+    <div class="window raised" id="w-spotify" style="left:200px; top:100px; width:300px">
+      <div class="titlebar"><span class="t">Music</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content" id="spotify-open" data-href="https://open.spotify.com/playlist/4fGIqRvwoG7jM1Ln5yfsZ7?si=450290e17da34466" style="text-align:center; cursor:pointer">
+        <h3>The playlist</h3>
+        <div style="display:inline-flex; align-items:center; justify-content:center; gap:12px; margin-top:2px">
+          <span style="opacity:.85">Stream FRENDZ - The Playlist on Spotify</span>
+          <img src="Spotify.png" alt="Open in Spotify" style="width:40px; height:40px; flex:0 0 auto; display:block">
+        </div>
+        <div style="margin-top:12px; font-size:11px; opacity:.55">Click anywhere on this tab to open</div>
+      </div>
+    </div>
+
     <div class="window raised" id="w-video" style="left:220px; top:120px; width:480px">
       <div class="titlebar"><span class="t">Videos</span><span class="tbtn raised" data-close>✕</span></div>
       <div class="content"><h3>Music video</h3>
@@ -738,6 +750,17 @@
         document.querySelectorAll('.dicon').forEach(d=>d.classList.remove('sel'));
         ic.classList.add('sel');
         if(ic.dataset.href){ window.open(ic.dataset.href, '_blank', 'noopener'); }
+        else if(ic.dataset.win==='w-music'){               // Music: player + Spotify link, side by side (no overlap)
+          openWin('w-spotify'); openWin('w-music');
+          if(innerWidth>640){
+            const m=document.getElementById('w-music'), s=document.getElementById('w-spotify');
+            const gap=22, totalW=m.offsetWidth+gap+s.offsetWidth, maxH=Math.max(m.offsetHeight,s.offsetHeight);
+            const sx=Math.round(8+Math.random()*Math.max(0, innerWidth-totalW-16));
+            const sy=Math.round(8+Math.random()*Math.max(0, innerHeight-32-maxH-16));
+            m.style.left=sx+'px'; m.style.top=sy+'px';
+            s.style.left=(sx+m.offsetWidth+gap)+'px'; s.style.top=sy+'px';
+          }
+        }
         else if(ic.dataset.win==='w-video'){               // Videos: music video above Extras, no overlap
           openWin('w-extras'); openWin('w-video');
           if(innerWidth>640){                              // desktop layout only
@@ -1106,6 +1129,12 @@
       sw.style.top =Math.max(0,(innerHeight-sw.offsetHeight)/2)+'px';
     });
   });
+
+  /* ---- Spotify tab: click anywhere opens the playlist ---- */
+  (function(){
+    const so=document.getElementById('spotify-open'); if(!so) return;
+    so.addEventListener('click', function(){ window.open(so.dataset.href, '_blank', 'noopener'); });
+  })();
 
   /* ---- caution button (by the clock) → NEA / rights notice ---- */
   (function(){
