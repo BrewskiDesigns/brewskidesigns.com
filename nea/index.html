@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRENDZ OS</title>
+<style>
+  :root{
+    --face:#c0c0c0; --hi:#dfdfdf; --sh:#808080; --dk:#000; --lt:#fff;
+    --desktop:#008080; --title:#000080; --title2:#1084d0;
+    --winbody:#12294f; --winink:#dbe8ff; --winframe:#0a3aa8; --winwell:#08152f;
+    --font:'Tahoma','Geneva','MS Sans Serif',sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{background:#000; overflow:hidden; font-family:var(--font); font-size:12px}
+
+  .raised{background:var(--face); border:2px solid; border-color:var(--hi) var(--dk) var(--dk) var(--hi);
+    box-shadow:inset 1px 1px var(--lt), inset -1px -1px var(--sh)}
+  .sunken{background:#fff; border:2px solid; border-color:var(--sh) var(--lt) var(--lt) var(--sh);
+    box-shadow:inset 1px 1px var(--dk), inset -1px -1px var(--hi)}
+
+  /* ---------- boot screen ---------- */
+  .screen{position:fixed; inset:0; overflow:hidden; background:#000; cursor:pointer;
+    pointer-events:none; z-index:100; transition:opacity .4s ease}
+  .screen.ready{pointer-events:auto}
+  .screen.hide{opacity:0}
+  .screen img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
+  .base{clip-path:inset(50% 0 50% 0); animation:crt-open 4s 1s cubic-bezier(.16,.8,.3,1) forwards}
+  @keyframes crt-open{ to{ clip-path:inset(0 0 0 0); } }
+  .g{opacity:0; pointer-events:none; mix-blend-mode:screen; will-change:transform,clip-path}
+  .g1{filter:hue-rotate(180deg) saturate(1.6)} .g2{filter:hue-rotate(60deg) saturate(1.6)}
+  .bar{position:absolute; left:0; right:0; height:6px; z-index:5; opacity:0; pointer-events:none;
+    mix-blend-mode:screen; background:rgba(120,180,255,.7); box-shadow:0 0 10px rgba(90,150,255,.6)}
+
+  /* ---------- desktop ---------- */
+  #desktop{position:fixed; inset:0; z-index:10; background:#03060f;
+    opacity:0; visibility:hidden; transition:opacity .3s ease}
+  #desktop.show{opacity:1; visibility:visible}
+  /* wallpaper + its two glitch clones */
+  .wall{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0}
+  .wg1,.wg2{opacity:0; mix-blend-mode:screen; will-change:transform,clip-path}
+  .wg1{filter:hue-rotate(180deg) saturate(1.6)}
+  .wg2{filter:hue-rotate(60deg)  saturate(1.6)}
+  .dbar{position:absolute; left:0; right:0; height:6px; z-index:65; opacity:0; pointer-events:none;
+    mix-blend-mode:screen; background:rgba(120,180,255,.7); box-shadow:0 0 10px rgba(90,150,255,.6)}
+  /* CRT scanlines over the whole desktop, to match the boot screen */
+  #desktop::after{content:""; position:absolute; inset:0; pointer-events:none; z-index:70;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.15) 0 2px, transparent 2px 4px); opacity:.4}
+
+  .icons{position:absolute; inset:0; z-index:5}
+  .dicon{position:absolute; left:0; top:0; width:120px; text-align:center; color:#fff; cursor:pointer;
+    user-select:none; padding:2px; will-change:transform}
+  .dicon.dragging{z-index:100; cursor:grabbing; opacity:.9}
+  .dicon .ico{width:min(92px,9.6vh); height:min(92px,9.6vh); margin:0 auto; background-repeat:no-repeat;
+    background-position:center; background-size:contain; image-rendering:pixelated;
+    filter:drop-shadow(1px 1px 0 rgba(0,0,0,.5))}
+  .dicon .lbl{font-size:13px; margin-top:4px; text-shadow:1px 1px #000; padding:0 2px; display:inline-block}
+  .dicon.sel .lbl{background:var(--title); outline:1px dotted #fff}
+
+  /* windows */
+  .window{position:absolute; min-width:400px; display:none; flex-direction:column; z-index:20}
+  .window.open{display:flex}
+  .titlebar{background:linear-gradient(90deg,var(--title),var(--title2)); color:#fff; font-weight:bold;
+    padding:3px 3px 3px 6px; display:flex; align-items:center; gap:6px; cursor:grab; user-select:none}
+  .window.inactive .titlebar{background:linear-gradient(90deg,#7f7f7f,#b0b0b0)}
+  .titlebar .t{flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .tbtn{width:17px; height:15px; display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:bold; color:#000; cursor:pointer; line-height:1}
+  .content{padding:16px 18px; background:var(--face); line-height:1.6; overflow:auto; max-height:64vh; min-height:130px}
+  .content h3{font-size:13px; margin:0 0 8px}
+  .content .row{display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px dotted #999}
+  .content a{color:#000080}
+  .btn{display:inline-block; padding:4px 14px; margin-top:8px; cursor:pointer; font-family:var(--font)}
+  .btn:active{border-color:var(--dk) var(--hi) var(--hi) var(--dk); box-shadow:inset 1px 1px var(--sh), inset -1px -1px var(--lt)}
+  .field{width:100%; padding:3px 5px; margin:3px 0 8px; font-family:var(--font); font-size:12px; outline:none}
+
+  /* taskbar */
+  .taskbar{position:absolute; left:0; right:0; bottom:0; height:32px; display:flex; align-items:center;
+    gap:5px; padding:3px 4px; z-index:50}
+  .start{display:flex; align-items:center; gap:6px; padding:2px 8px 2px 5px; font-weight:bold; cursor:pointer}
+  .start .logo{width:18px; height:18px; border-radius:50%; background:radial-gradient(circle at 40% 35%,#7db4ff,#1a56c4);
+    display:inline-block; box-shadow:0 0 0 1px #000}
+  .tasks{flex:1; display:flex; gap:4px; overflow:hidden}
+  .taskbtn{max-width:150px; padding:2px 8px; font-size:11px; cursor:pointer; white-space:nowrap; overflow:hidden;
+    text-overflow:ellipsis; display:flex; align-items:center; gap:5px}
+  .taskbtn.active{border-color:var(--dk) var(--hi) var(--hi) var(--dk); box-shadow:inset 1px 1px var(--sh), inset -1px -1px var(--lt); font-weight:bold}
+  .tray{padding:3px 8px; font-size:11px}
+
+  /* start menu */
+  .startmenu{position:absolute; bottom:32px; left:4px; width:200px; z-index:60; display:none; padding:2px}
+  .startmenu.show{display:block}
+  .startmenu .item{display:flex; align-items:center; gap:9px; padding:6px 10px; cursor:pointer; font-size:12px}
+  .startmenu .item:hover{background:var(--title); color:#fff}
+  .startmenu .sep{height:1px; background:var(--sh); box-shadow:0 1px var(--lt); margin:3px 2px}
+
+  /* ---- Windows XP (Luna) blue window theme ---- */
+  .window{background:var(--winframe); border:0; border-radius:8px 8px 4px 4px;
+    box-shadow:0 8px 24px rgba(0,0,0,.55); padding:0; overflow:hidden}
+  .titlebar{background:linear-gradient(180deg,#4a9bff 0%,#2f7fe8 9%,#1a5fd0 46%,#134fbf 92%,#2a6fd4 100%);
+    border-radius:7px 7px 0 0; padding:4px 4px 4px 8px; text-shadow:1px 1px 1px rgba(0,0,0,.35)}
+  .window.inactive .titlebar{background:linear-gradient(180deg,#9fb6dd,#6d8cbe)}
+  .content{margin:0 3px 3px; background:var(--winbody); color:var(--winink); border-radius:0 0 3px 3px}
+  .content h3{color:#fff}
+  .content .row{border-bottom:1px dotted #3a5a9a}
+  .content a{color:#8fc0ff}
+  .window .sunken{background:var(--winwell); border-color:#04102a #2a4a8a #2a4a8a #04102a;
+    box-shadow:inset 1px 1px #000, inset -1px -1px #244a8a; color:#bcd4ff}
+  .field{color:#dbe8ff}
+  .field::placeholder{color:#6d86b8}
+  .btn{color:#fff; background:linear-gradient(#4a9bff,#1650b8); border:1px solid #0a3a90; border-radius:4px;
+    box-shadow:inset 0 1px rgba(255,255,255,.35); padding:5px 16px}
+  .btn:active{background:linear-gradient(#1650b8,#4a9bff); box-shadow:inset 0 1px rgba(0,0,0,.3)}
+  .tbtn{width:20px; height:20px; margin-left:2px; border-radius:3px; color:#fff;
+    border:1px solid rgba(255,255,255,.55); box-shadow:inset 0 1px rgba(255,255,255,.4); font-size:11px}
+  .tbtn.xpbtn{background:linear-gradient(#5aa0ff,#2f6fd0)}
+  .tbtn[data-close]{background:linear-gradient(#f4977f,#d8442a); border-color:#a83318}
+  .window.max{left:0!important; top:0!important; width:100%!important; height:calc(100% - 32px)!important; border-radius:0}
+  .window.max .content{max-height:none; flex:1}
+  .window.open.mini{display:none}
+
+  /* ---- XP blue taskbar ---- */
+  .taskbar{height:34px; border:0;
+    background:linear-gradient(180deg,#3f8cf3 0%,#2b73e0 9%,#1e5fd0 46%,#2159c6 90%,#164bb0 100%);
+    box-shadow:inset 0 1px rgba(255,255,255,.45)}
+  .start{border:0; border-radius:0 11px 11px 0; padding:2px 16px 2px 8px; color:#fff; font-style:italic;
+    text-shadow:1px 1px 1px rgba(0,0,0,.4); box-shadow:inset 0 1px rgba(255,255,255,.5);
+    background:linear-gradient(180deg,#8ad86f 0%,#4bad3a 55%,#2f8a27 100%)}
+  .start .logo{background:radial-gradient(circle at 40% 35%,#fff,#dfe8ff)}
+  .taskbtn{color:#fff; border:1px solid #16469e; border-radius:3px;
+    background:linear-gradient(#5a9bf0,#2e6fd0); box-shadow:inset 0 1px rgba(255,255,255,.35)}
+  .taskbtn.active{background:linear-gradient(#173f92,#3f80e0); box-shadow:inset 0 1px rgba(0,0,0,.35)}
+  .tray{color:#fff; border:1px solid #0d3f96; border-radius:3px;
+    background:linear-gradient(#1e5cc8,#134cae); box-shadow:inset 0 1px rgba(0,0,0,.25)}
+
+  /* ---- Store product grid ---- */
+  .shop-sub{font-size:11px; opacity:.7; margin:-6px 0 12px}
+  .shop-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+  .window.max .shop-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  .prod{display:flex; flex-direction:column; background:rgba(255,255,255,.04);
+    border:1px solid #2a4a8a; border-radius:6px; padding:8px; text-align:center; transition:border-color .12s, background .12s}
+  .prod:hover{border-color:#5a9bff; background:rgba(255,255,255,.09)}
+  .lbl-row{margin-top:14px; font-size:10px; opacity:.55; text-transform:uppercase; letter-spacing:1.5px}
+  .sizebtn{min-width:36px; padding:5px 4px; font-size:12px; cursor:pointer; border-radius:4px; user-select:none;
+    border:1px solid #2a4a8a; background:rgba(255,255,255,.05); color:#dbe8ff}
+  .sizebtn:hover{border-color:#5a9bff}
+  .sizebtn.on{background:linear-gradient(#4a9bff,#1650b8); border-color:#0a3a90; font-weight:bold}
+  .qtyrow{display:flex; justify-content:center; align-items:stretch; margin-top:6px}
+  .qtyrow .qbtn{width:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px;
+    user-select:none; border:1px solid #2a4a8a; background:rgba(255,255,255,.05); color:#dbe8ff}
+  .qtyrow .qbtn:hover{border-color:#5a9bff}
+  .qtyrow .qnum{min-width:46px; display:flex; align-items:center; justify-content:center; font-weight:bold;
+    border-top:1px solid #2a4a8a; border-bottom:1px solid #2a4a8a}
+  .cart-line{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 0;
+    border-bottom:1px dotted #3a5a9a; text-align:left}
+  .cart-line .cl-rm{cursor:pointer; font-size:11px; display:inline-block; margin-top:5px; padding:2px 9px; border-radius:3px;
+    user-select:none; border:1px solid #8a3a3a; background:rgba(255,80,80,.14); color:#ff9a9a}
+  .cart-line .cl-rm:hover{background:rgba(255,80,80,.3); color:#fff; border-color:#c04a4a}
+  .cart-total{display:flex; justify-content:space-between; font-weight:bold; margin-top:12px; font-size:15px}
+  .thumb{position:relative; aspect-ratio:1/1; border-radius:4px; overflow:hidden; margin-bottom:8px;
+    background:linear-gradient(160deg,#c9d3e6,#aeb9d0)}
+  .thumb .slides{width:100%; height:100%}
+  .thumb img{width:100%; height:100%; object-fit:contain; image-rendering:auto; display:none}
+  .thumb img.on{display:block}
+  .thumb .nav{position:absolute; top:50%; transform:translateY(-50%); width:22px; height:34px;
+    border:0; cursor:pointer; font-size:20px; line-height:1; color:#fff; padding:0;
+    background:rgba(10,28,64,.5); border-radius:4px; display:flex; align-items:center; justify-content:center}
+  .thumb .nav:hover{background:rgba(10,28,64,.82)}
+  .thumb .nav.prev{left:5px}
+  .thumb .nav.next{right:5px}
+  .thumb .dots{position:absolute; bottom:5px; left:0; right:0; display:flex; gap:4px; justify-content:center}
+  .thumb .dots i{width:5px; height:5px; border-radius:50%; background:rgba(10,28,64,.35)}
+  .thumb .dots i.on{background:rgba(10,28,64,.85)}
+  .prod .pname{font-size:12px; font-weight:bold; line-height:1.25; min-height:2.4em;
+    display:flex; align-items:center; justify-content:center}
+  .prod .pmeta{display:flex; justify-content:space-between; align-items:center; margin-top:4px; font-size:11px}
+  .prod .pvar{opacity:.65}
+  .prod .pprice{font-weight:bold}
+  .prod .btn{margin-top:8px; width:100%; box-sizing:border-box; text-align:center}
+  .prod.sold .btn{background:#3a4a66; border-color:#2a3a52; cursor:default; opacity:.7}
+
+  /* Photos gallery */
+  #w-photos .content{display:flex; flex-direction:column; height:64vh; overflow:hidden}
+  #w-photos.max .content{height:auto}
+  #w-photos .content h3{flex:0 0 auto}
+  .photo-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(5,1fr); gap:8px 10px; flex:1; min-height:0}
+  .photo-cell{display:flex; flex-direction:column; min-height:0; min-width:0}
+  .photo-frame{flex:1; min-height:0; display:flex; align-items:center; justify-content:center}
+  .photo-box{height:100%; width:auto; aspect-ratio:2/3; max-width:100%}   /* portrait photo ratio, shrinks to fit */
+  .photo-title{flex:0 0 auto; height:16px; line-height:16px; margin-top:4px; font-size:11px; text-align:center;
+    opacity:.8; overflow:hidden; white-space:nowrap; text-overflow:ellipsis}
+  .photo-title:empty::before{content:'Title'; opacity:.4}
+  #w-photos.max .photo-grid{grid-template-columns:repeat(5,1fr); grid-template-rows:repeat(4,1fr); gap:14px 16px}
+  #w-photos.max .photo-title{height:22px; line-height:22px; font-size:14px}
+
+  /* Music player */
+  .mp{max-width:280px; margin:0 auto; padding:4px 0}
+  .mp-art{width:min(190px,44vh); aspect-ratio:1/1; margin:0 auto 14px; border-radius:6px; overflow:hidden;
+    box-shadow:0 6px 20px rgba(0,0,0,.55); border:1px solid #2a4a8a}
+  .mp-art img{width:100%; height:100%; object-fit:cover; display:block}
+  .mp-title{font-size:19px; font-weight:bold; letter-spacing:1px}
+  .mp-artist{font-size:13px; opacity:.7; margin-top:2px}
+  .mp-seek{height:6px; border-radius:3px; background:rgba(255,255,255,.12); margin:16px 0 6px; cursor:pointer; overflow:hidden}
+  .mp-fill{height:100%; width:0%; background:linear-gradient(90deg,#4a9bff,#8fc0ff); border-radius:3px}
+  .mp-time{display:flex; justify-content:space-between; font-size:11px; opacity:.7}
+  .mp-controls{display:flex; align-items:center; justify-content:center; gap:18px; margin-top:16px}
+  .mp-btn{min-width:36px; height:36px; padding:0 6px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    user-select:none; border-radius:50%; border:1px solid #2a4a8a; background:rgba(255,255,255,.05); font-size:12px}
+  .mp-btn:hover{border-color:#5a9bff}
+  .mp-btn.mp-play{width:48px; height:48px; font-size:16px; color:#fff; border-color:#0a3a90;
+    background:linear-gradient(#4a9bff,#1650b8); box-shadow:inset 0 1px rgba(255,255,255,.35)}
+  .mp-btn.mp-play:active{background:linear-gradient(#1650b8,#4a9bff)}
+
+  /* Videos + Extras */
+  .vid-box{height:230px; display:flex; align-items:center; justify-content:center; color:#6d86b8; text-align:center}
+  .vid-box-sm{height:130px}
+  #w-video.max .content, #w-extras.max .content{display:flex; flex-direction:column}
+  #w-video.max .content h3, #w-extras.max .content h3{flex:0 0 auto}
+  #w-video.max .vid-box, #w-extras.max .vid-box{flex:1; height:auto}   /* video fills most of the screen */
+
+  /* Links — socials */
+  .social-list{display:flex; flex-direction:column; gap:7px; margin-top:4px}
+  .social{display:flex; align-items:center; gap:12px; padding:8px 11px; border-radius:6px; cursor:pointer;
+    border:1px solid #2a4a8a; background:rgba(255,255,255,.04); transition:border-color .12s, background .12s}
+  .social:hover{border-color:#5a9bff; background:rgba(255,255,255,.09)}
+  .social img{width:34px; height:34px; object-fit:contain; image-rendering:pixelated; flex:0 0 auto}
+  .social .s-name{font-weight:bold}
+  .social .s-handle{font-size:12px; opacity:.7; margin-left:auto}
+
+  /* Tour poster window */
+  #w-tourposter .poster-img{ max-width:100%; max-height:58vh; display:block; margin:0 auto; border-radius:3px }
+  #w-tourposter.max .content{ display:flex; align-items:center; justify-content:center }
+  #w-tourposter.max .poster-img{ max-height:100%; max-width:100%; margin:0 }
+
+  @media (prefers-reduced-motion:reduce){ .base{ clip-path:none; animation:none; } }
+</style>
+</head>
+<body>
+
+  <!-- ===================== BOOT ===================== -->
+  <div class="screen" id="boot">
+    <img class="base" src="boot.png" alt="FRENDZ — Frendly Computer Operating Systems">
+    <img class="g g1" src="boot.png" alt="">
+    <img class="g g2" src="boot.png" alt="">
+    <div class="bar"></div>
+  </div>
+
+  <!-- ===================== DESKTOP ===================== -->
+  <div id="desktop">
+    <img class="wall wbase" src="desktop-bg.png" alt="">
+    <img class="wall wg1" src="desktop-bg.png" alt="">
+    <img class="wall wg2" src="desktop-bg.png" alt="">
+    <div class="dbar"></div>
+    <div class="icons">
+      <div class="dicon" data-win="w-recycle" data-col="0" data-row="0"><div class="ico" style="background-image:url('trash.png')"></div><div class="lbl">Trash</div></div>
+      <div class="dicon" data-win="w-video" data-col="0" data-row="1"><div class="ico" style="background-image:url('film.png')"></div><div class="lbl">Videos</div></div>
+      <div class="dicon" data-win="w-music" data-col="0" data-row="2"><div class="ico" style="background-image:url('cd.png')"></div><div class="lbl">Music</div></div>
+      <div class="dicon" data-win="w-photos" data-col="0" data-row="3"><div class="ico" style="background-image:url('camera-removebg-preview.png')"></div><div class="lbl">Photos</div></div>
+      <div class="dicon" data-win="w-net" data-col="0" data-row="4"><div class="ico" style="background-image:url('world-removebg-preview.png')"></div><div class="lbl">Tour</div></div>
+      <div class="dicon" data-win="w-shop" data-col="0" data-row="5"><div class="ico" style="background-image:url('cart-removebg-preview.png')"></div><div class="lbl">Store</div></div>
+      <div class="dicon" data-win="w-join" data-col="0" data-row="6"><div class="ico" style="background-image:url('mail.png')"></div><div class="lbl">Sign Up</div></div>
+      <div class="dicon" data-win="w-contact" data-col="1" data-row="0"><div class="ico" style="background-image:url('phone.png')"></div><div class="lbl">Contact</div></div>
+      <div class="dicon" data-win="w-about" data-col="1" data-row="1"><div class="ico" style="background-image:url('light.png')"></div><div class="lbl">Links</div></div>
+      <div class="dicon" data-win="w-bio" data-col="1" data-row="2"><div class="ico" style="background-image:url('notebook.png')"></div><div class="lbl">Thoughts</div></div>
+      <div class="dicon" data-href="https://www.dominomusic.com/uk" data-col="1" data-row="3"><div class="ico" style="background-image:url('domino.png'); background-size:76%"></div><div class="lbl">The Domino</div></div>
+    </div>
+
+    <!-- windows -->
+    <div class="window raised" id="w-music" style="left:130px; top:60px; width:360px">
+      <div class="titlebar"><span class="t">Music</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content" style="text-align:center">
+        <div class="mp">
+          <div class="mp-art"><img src="Mockup/vinyl 3.png" alt=""></div>
+          <div class="mp-title">FRENDZ</div>
+          <div class="mp-artist">BREWSKI</div>
+          <div class="mp-seek"><div class="mp-fill"></div></div>
+          <div class="mp-time"><span class="mp-cur">0:00</span><span class="mp-dur">2:58</span></div>
+          <div class="mp-controls">
+            <span class="mp-btn" data-prev>◀◀</span>
+            <span class="mp-btn mp-play" data-play>▶</span>
+            <span class="mp-btn" data-next>▶▶</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-video" style="left:220px; top:120px; width:480px">
+      <div class="titlebar"><span class="t">Videos</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content"><h3>Music video</h3>
+        <div class="sunken vid-box">[ video goes here ]</div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-extras" style="left:220px; top:120px; width:380px">
+      <div class="titlebar"><span class="t">Videos</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content"><h3>Extras</h3>
+        <div class="sunken vid-box vid-box-sm">[ video goes here ]</div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-bio" style="left:300px; top:90px; width:400px">
+      <div class="titlebar"><span class="t">Thoughts</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content" style="font-family:var(--font); line-height:1.6">FRENDZ is an extension of me, my life, my thoughts and feelings.<br><br>It means to move forward, cut things out of your life that don’t serve you well. Keep your loved ones close and watch out for snitches and liars. Push for the three P’s: Power, Paper and, well, you know the third. Celebrate your successes and give back to those who helped you along your journey. Don’t give fuel to feed the Baboons or the Ghetto Cinderellas, stay out of trouble and keep your comrades tight when things get dark. Thanks for your on going support and love.<br><br>BREWSKI<br><br>P.S - Seriously look out for the Ghetto Cinderellas - they’ll put you under a spell!</div>
+    </div>
+
+    <div class="window raised" id="w-shop" style="left:120px; top:80px; width:600px">
+      <div class="titlebar"><span class="t">Store</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px">
+          <div><h3 style="margin-bottom:2px">Store</h3>
+            <div class="shop-sub">Shop the newest styles to look fly in front of your frendz</div></div>
+          <span class="btn raised" id="cart-btn" style="white-space:nowrap">Basket (0)</span>
+        </div>
+        <div class="shop-grid" id="shop-grid"></div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-cart" style="left:300px; top:110px; width:360px">
+      <div class="titlebar"><span class="t">Basket</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content" id="cart-body"></div>
+    </div>
+
+    <div class="window raised" id="w-join" style="left:260px; top:70px; width:320px">
+      <div class="titlebar"><span class="t">Sign Up</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content"><h3>Join the group of frendz</h3>
+        <div>First dibs on drops, tickets and merch.</div>
+        <input class="field sunken" type="email" placeholder="your@email.com">
+        <div class="btn raised">Sign up</div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-net" style="left:200px; top:90px; width:300px">
+      <div class="titlebar"><span class="t">Tour</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content" style="text-align:center">
+        <canvas id="globe-cv" width="256" height="256" style="width:256px; height:256px; image-rendering:pixelated;
+          cursor:grab; background:#04102a; border:2px solid; border-color:#04102a #2a4a8a #2a4a8a #04102a"></canvas>
+        <div style="margin-top:8px; font-size:12px; opacity:.7">drag to spin · click a marker</div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-tourposter" style="left:520px; top:70px; width:min(400px,90vw)">
+      <div class="titlebar"><span class="t">Tour</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content" style="text-align:center">
+        <img src="Mockup/Tour poster 2.png" alt="Tour poster" class="poster-img">
+      </div>
+    </div>
+
+    <div class="window raised" id="w-photos" style="left:240px; top:100px; width:420px">
+      <div class="titlebar"><span class="t">Photos</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content"><h3>Gallery</h3>
+        <div class="photo-grid" id="photo-grid"></div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-contact" style="left:300px; top:130px; width:380px">
+      <div class="titlebar"><span class="t">Contact</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content"><h3>Get in touch</h3>
+        <div class="row"><span>Tour</span><span>tour@frendz.com</span></div>
+        <div class="row"><span>General</span><span>help@frendz.com</span></div>
+        <div class="row"><span>Fan-Mail</span><span>mail@frendz.com</span></div>
+        <div class="row"><span>PO Box</span><span>FR3NDZ</span></div>
+        <div class="row"><span>Telephone</span><span>01-FR3NDZ-2027</span></div>
+        <div style="margin-top:12px; font-size:11px; opacity:.6">All contact options available 24/7.</div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-about" style="left:280px; top:110px; width:340px">
+      <div class="titlebar"><span class="t">Links</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content"><h3>Links</h3>
+        <div class="social-list">
+          <div class="social" data-social><img src="icons/53c4366201a1a2e578272a502ffdd3e8-removebg-preview.png" alt=""><span class="s-name">Instagram</span><span class="s-handle">@BREWSKI</span></div>
+          <div class="social" data-social><img src="icons/tik tok icon.png" alt=""><span class="s-name">TikTok</span><span class="s-handle">@BREWSKI</span></div>
+          <div class="social" data-social><img src="icons/youtube icon.png" alt=""><span class="s-name">YouTube</span><span class="s-handle">@BREWSKI</span></div>
+          <div class="social" data-social><img src="icons/snapchat icon.png" alt=""><span class="s-name">Snapchat</span><span class="s-handle">@BREWSKI</span></div>
+          <div class="social" data-social><img src="icons/facebook icon.png" alt=""><span class="s-name">Facebook</span><span class="s-handle">@BREWSKI</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-recycle" style="left:260px; top:140px; width:360px">
+      <div class="titlebar"><span class="t">Trash</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content"><div>Nothing to see here...</div></div>
+    </div>
+
+    <div class="window raised" id="w-tourdate" style="width:280px">
+      <div class="titlebar"><span class="t">Tour Date</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content" id="tourdate-body" style="text-align:center"></div>
+    </div>
+
+    <div class="window raised" id="w-notice" style="width:360px">
+      <div class="titlebar"><span class="t">Notice</span></div>
+      <div class="content"><div>Some frendz are meant to be deleted, not this one though.</div>
+        <div style="text-align:center; margin-top:16px"><span class="btn raised" data-close>OK</span></div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-broke" style="width:360px">
+      <div class="titlebar"><span class="t">Notice</span></div>
+      <div class="content"><div>You are too broke to check out.</div>
+        <div style="text-align:center; margin-top:16px"><span class="btn raised" id="broke-ok" data-close>OK</span></div>
+      </div>
+    </div>
+
+    <div class="window raised" id="w-social" style="width:360px">
+      <div class="titlebar"><span class="t">Notice</span></div>
+      <div class="content"><div>You're really not that sociable.</div>
+        <div style="text-align:center; margin-top:16px"><span class="btn raised" data-close>OK</span></div>
+      </div>
+    </div>
+
+    <!-- taskbar -->
+    <div class="taskbar raised">
+      <div class="start raised" id="startbtn"><span class="logo"></span>Start</div>
+      <div class="tasks" id="tasks"></div>
+      <div class="tray raised" id="clock">--:--</div>
+    </div>
+
+    <!-- start menu -->
+    <div class="startmenu raised" id="startmenu">
+      <div class="item" data-win="w-music">Music</div>
+      <div class="item" data-win="w-video">Videos</div>
+      <div class="item" data-win="w-photos">Photos</div>
+      <div class="item" data-win="w-bio">Thoughts</div>
+      <div class="item" data-win="w-shop">Store</div>
+      <div class="item" data-win="w-join">Sign Up</div>
+      <div class="item" data-win="w-net">Tour</div>
+      <div class="item" data-win="w-contact">Contact</div>
+      <div class="item" data-win="w-about">Links</div>
+      <div class="item" data-win="w-recycle">Trash</div>
+      <div class="sep"></div>
+      <div class="item" id="shutdown">Shut Down…</div>
+    </div>
+  </div>
+
+<script>
+  /* ===================== BOOT + GLITCH ===================== */
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const boot = document.getElementById('boot');
+  const base = document.querySelector('.base');
+  const g1 = document.querySelector('.g1'), g2 = document.querySelector('.g2');
+  const bar = document.querySelector('.bar');
+  const rnd = (a,b)=> a + Math.random()*(b-a);
+  let left = false;
+
+  function reset(){ base.style.transform=''; base.style.filter=''; g1.style.opacity=0; g2.style.opacity=0; bar.style.opacity=0; }
+  function glitch(){
+    if(left) return;
+    const end = performance.now() + rnd(200,460);
+    const iv = setInterval(function(){
+      if(left){ clearInterval(iv); reset(); return; }
+      if(performance.now() > end){ clearInterval(iv); reset(); schedule(); return; }
+      [[g1,1],[g2,-1]].forEach(function(p){ const g=p[0],d=p[1],top=rnd(0,78),h=rnd(4,20);
+        g.style.clipPath='inset('+top+'% 0 '+Math.max(0,100-top-h)+'% 0)';
+        g.style.transform='translateX('+(d*rnd(5,20))+'px)'; g.style.opacity=1; });
+      base.style.transform='translateX('+rnd(-4,4)+'px)';
+      base.style.filter = Math.random()<0.25 ? 'brightness(1.4) contrast(1.15)' : '';
+      if(Math.random()<0.5){ bar.style.top=rnd(0,100)+'%'; bar.style.opacity=rnd(.3,.8).toFixed(2); } else bar.style.opacity=0;
+    }, 55);
+  }
+  function schedule(){ if(!left && !reduce) setTimeout(glitch, rnd(1100,3200)); }
+  function onOpened(){ boot.classList.add('ready'); glitch(); }
+  if(reduce) boot.classList.add('ready');
+  else base.addEventListener('animationstart', onOpened, {once:true});
+
+  boot.addEventListener('click', function(){
+    if(left) return; left = true;
+    boot.classList.add('hide');
+    document.getElementById('desktop').classList.add('show');
+    setTimeout(function(){ boot.style.display='none'; }, 450);
+    deskOn = true; dschedule();          // start the desktop glitch
+  });
+
+  /* ===================== DESKTOP GLITCH (same as boot) ===================== */
+  const wbase = document.querySelector('.wbase');
+  const wg1 = document.querySelector('.wg1'), wg2 = document.querySelector('.wg2');
+  const dbar = document.querySelector('.dbar');
+  let deskOn = false;
+  function dreset(){ wbase.style.transform=''; wbase.style.filter=''; wg1.style.opacity=0; wg2.style.opacity=0; dbar.style.opacity=0; }
+  function dglitch(){
+    if(!deskOn) return;
+    const end = performance.now() + rnd(200,460);
+    const iv = setInterval(function(){
+      if(!deskOn){ clearInterval(iv); dreset(); return; }
+      if(performance.now() > end){ clearInterval(iv); dreset(); dschedule(); return; }
+      [[wg1,1],[wg2,-1]].forEach(function(p){ const g=p[0],d=p[1],top=rnd(0,78),h=rnd(4,20);
+        g.style.clipPath='inset('+top+'% 0 '+Math.max(0,100-top-h)+'% 0)';
+        g.style.transform='translateX('+(d*rnd(5,20))+'px)'; g.style.opacity=1; });
+      wbase.style.transform='translateX('+rnd(-4,4)+'px)';
+      wbase.style.filter = Math.random()<0.25 ? 'brightness(1.3) contrast(1.1)' : '';
+      if(Math.random()<0.5){ dbar.style.top=rnd(0,100)+'%'; dbar.style.opacity=rnd(.3,.8).toFixed(2); } else dbar.style.opacity=0;
+    }, 55);
+  }
+  function dschedule(){ if(deskOn && !reduce) setTimeout(dglitch, rnd(1100,3200)); }
+
+  /* ===================== DESKTOP ===================== */
+  let z = 20;
+  const tasks = document.getElementById('tasks');
+  const openBtns = {};      // window id -> taskbar button
+
+  function focusWin(w){
+    document.querySelectorAll('.window').forEach(x=>x.classList.add('inactive'));
+    w.classList.remove('inactive');
+    w.style.zIndex = ++z;
+    for(const id in openBtns) openBtns[id].classList.toggle('active', id===w.id);
+  }
+  function openWin(id){
+    const w = document.getElementById(id);
+    if(!w.classList.contains('open')){
+      w.classList.add('open');
+      w.classList.remove('mini','max');
+      // drop it somewhere random, but fully on-screen and above the taskbar
+      const ww = w.offsetWidth || 400, wh = w.offsetHeight || 240;
+      const maxX = Math.max(10, innerWidth - ww - 16);
+      const maxY = Math.max(10, innerHeight - 32 - wh - 16);
+      w.style.left = Math.round(rnd(10, maxX)) + 'px';
+      w.style.top  = Math.round(rnd(10, maxY)) + 'px';
+      // add a taskbar button
+      const b = document.createElement('div'); b.className='taskbtn raised';
+      b.textContent = w.querySelector('.titlebar .t').textContent;
+      b.addEventListener('click', function(){ w.classList.remove('mini'); focusWin(w); });
+      tasks.appendChild(b); openBtns[id]=b;
+    }
+    focusWin(w);
+  }
+  function closeWin(w){
+    w.classList.remove('open');
+    if(openBtns[w.id]){ openBtns[w.id].remove(); delete openBtns[w.id]; }
+  }
+
+  // desktop icons open windows
+  const getTrash = () => document.querySelector('.dicon[data-win="w-recycle"]');
+  function overlaps(a,b){ const r1=a.getBoundingClientRect(), r2=b.getBoundingClientRect();
+    return !(r1.right<r2.left || r1.left>r2.right || r1.bottom<r2.top || r1.top>r2.bottom); }
+
+  // 12-across x 7-down grid (pad keeps the bottom row off the taskbar)
+  const GCOLS=12, GROWS=7, GPAD=44;
+  function placeAtCell(ic, col, row, animate){
+    const cellW=innerWidth/GCOLS, cellH=(innerHeight-GPAD)/GROWS;
+    ic._tx = (col+0.5)*cellW - ic.offsetWidth/2;
+    ic._ty = (row+0.5)*cellH - ic.offsetHeight/2;
+    ic.dataset.col=col; ic.dataset.row=row;
+    ic.style.transition = animate ? 'transform .18s ease' : 'none';
+    ic.style.transform = 'translate('+ic._tx+'px,'+ic._ty+'px)';
+  }
+  function cellTaken(col, row, ignore){
+    return [...document.querySelectorAll('.dicon')].some(function(o){
+      return o!==ignore && +o.dataset.col===col && +o.dataset.row===row; });
+  }
+  function snapToGrid(ic){
+    const r=ic.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const cellW=innerWidth/GCOLS, cellH=(innerHeight-GPAD)/GROWS;
+    const col=Math.min(GCOLS-1, Math.max(0, Math.round(cx/cellW-0.5)));
+    const row=Math.min(GROWS-1, Math.max(0, Math.round(cy/cellH-0.5)));
+    if(cellTaken(col, row, ic)) return false;   // one app per box → refuse occupied cell
+    placeAtCell(ic, col, row, true);
+    return true;
+  }
+  function placeAllIcons(){ document.querySelectorAll('.dicon').forEach(function(ic){ placeAtCell(ic, +ic.dataset.col||0, +ic.dataset.row||0, false); }); }
+  addEventListener('resize', placeAllIcons);
+  placeAllIcons();
+
+  /* ---- hollow wireframe grid globe with tour-date markers (Tour) ---- */
+  (function(){
+    const cv=document.getElementById('globe-cv'); if(!cv) return;
+    const ctx=cv.getContext('2d');
+    const pinFront=new Image(); pinFront.src='pin.png';
+    const pinBack=new Image();  pinBack.src='pin%20dark.png';
+    const PIN_AR=2000/1854;
+    let W=cv.width, H=cv.height, gx=W/2, gy=H/2, R=Math.min(W,H)*0.42, F=R*4;
+    const TAU=Math.PI*2, D2R=Math.PI/180;
+    // fit the globe to 256 normally, and to the window when maximised
+    function fitCanvas(){
+      const win=document.getElementById('w-net'); if(!win) return;
+      let size=256;
+      if(win.classList.contains('max')){
+        const wr=win.getBoundingClientRect();
+        size=Math.max(180, Math.min(wr.width-28, wr.height-96));
+      }
+      if(cv.width!==size){ cv.width=size; cv.height=size; }
+      cv.style.width=size+'px'; cv.style.height=size+'px';
+      W=cv.width; H=cv.height; gx=W/2; gy=H/2; R=Math.min(W,H)*0.42; F=R*4;
+    }
+    let rotY=0.6, rotX=-0.3, velY=0, velX=0, dragging=false, lx=0, ly=0, downX=0, downY=0, moved=false;
+
+    // tour stops — letter (globe label) + city + date (routed sensibly by region)
+    const STOPS=[
+      {lat:-28, lon:8,    color:[255,59,59],   letter:'A', city:'Rome',         date:'21 Mar 2027'},
+      {lat:-43, lon:8,    color:[255,149,0],   letter:'B', city:'Paris',        date:'15 Mar 2027'},
+      {lat:-47, lon:34,   color:[255,224,40],  letter:'C', city:'London',       date:'12 Mar 2027'},
+      {lat:-34, lon:34,   color:[100,195,255], letter:'M', city:'Madrid',       date:'18 Mar 2027'},
+      {lat:-47, lon:-74,  color:[150,255,60],  letter:'D', city:'Hong Kong',    date:'15 May 2027'},
+      {lat:-40, lon:144,  color:[34,197,94],   letter:'E', city:'Chicago',      date:'05 Apr 2027'},
+      {lat:-43, lon:-98,  color:[20,205,185],  letter:'F', city:'Tokyo',        date:'19 May 2027'},
+      {lat:-38, lon:132,  color:[40,230,230],  letter:'G', city:'New York',     date:'02 Apr 2027'},
+      {lat:-33, lon:156,  color:[160,90,255],  letter:'H', city:'Los Angeles',  date:'09 Apr 2027'},
+      {lat:34,  lon:-28,  color:[205,80,240],  letter:'I', city:'Cape Town',    date:'04 May 2027'},
+      {lat:8,   lon:138,  color:[255,60,208],  letter:'J', city:'São Paulo',    date:'20 Apr 2027'},
+      {lat:20,  lon:150,  color:[255,150,190], letter:'K', city:'Buenos Aires', date:'23 Apr 2027'},
+      {lat:55,  lon:-118, color:[240,240,255], letter:'L', city:'Sydney',       date:'28 May 2027'}
+    ];
+    // per-stop ticket prices — fixed once so they stay stable between clicks
+    const SOLD_OUT=['London','São Paulo','Chicago'];
+    for(const s of STOPS){
+      s.soldOut  = SOLD_OUT.includes(s.city);
+      s.standing = 110 + Math.floor(Math.random()*21); // $110–130
+      s.seating  = 75  + Math.floor(Math.random()*26); // $75–100
+    }
+    let markScreen=[]; // {x,y,r,front,stop} in canvas px, refreshed each frame
+
+    cv.style.touchAction='none';
+    cv.addEventListener('pointerdown',function(e){ dragging=true; moved=false; lx=downX=e.clientX; ly=downY=e.clientY; velX=velY=0; try{cv.setPointerCapture(e.pointerId);}catch(_){} });
+    cv.addEventListener('pointermove',function(e){ if(!dragging)return; const dx=e.clientX-lx, dy=e.clientY-ly; lx=e.clientX; ly=e.clientY;
+      if(Math.abs(e.clientX-downX)>4 || Math.abs(e.clientY-downY)>4) moved=true;
+      velY=dx*0.01; velX=dy*0.01; rotY+=velY; rotX+=velX; });
+    cv.addEventListener('pointerup',function(e){ dragging=false; if(!moved) handleClick(e); });
+    cv.addEventListener('pointercancel',function(){ dragging=false; });
+
+    function handleClick(e){
+      const rect=cv.getBoundingClientRect();
+      const px=(e.clientX-rect.left)*(W/rect.width), py=(e.clientY-rect.top)*(H/rect.height);
+      const hitR=Math.max(12, R*0.13); let best=null, bestD=hitR*hitR;
+      for(const m of markScreen){ if(!m.front) continue; const dx=px-m.x, dy=py-m.y, d=dx*dx+dy*dy; if(d<bestD){ bestD=d; best=m.stop; } }
+      if(best) showStop(best);
+    }
+    function showStop(s){
+      const info = s.soldOut
+        ? '<div style="margin-top:12px; font-size:14px; font-weight:bold; letter-spacing:2px; color:#ff6b6b">SOLD OUT</div>'
+        : '<div style="margin-top:12px; font-size:13px; opacity:.85">Standing: $'+s.standing+'</div>'+
+          '<div style="font-size:13px; opacity:.85">Seating: $'+s.seating+'</div>'+
+          '<div style="margin-top:14px"><span class="btn raised" id="buy-tickets">Buy tickets</span></div>';
+      document.getElementById('tourdate-body').innerHTML =
+        '<div style="font-size:20px; font-weight:bold; letter-spacing:1px">'+s.city+'</div>'+
+        '<div style="margin-top:8px; font-size:14px; opacity:.85">'+s.date+'</div>'+
+        info;
+      const bt=document.getElementById('buy-tickets');
+      if(bt) bt.addEventListener('click', function(){ openWin('w-broke');
+        const bw=document.getElementById('w-broke');
+        bw.style.left=Math.max(0,(innerWidth-bw.offsetWidth)/2)+'px';
+        bw.style.top =Math.max(0,(innerHeight-bw.offsetHeight)/2)+'px'; });
+      openWin('w-tourdate');
+    }
+
+    function proj(lat,lon,cX,sX,cY,sY){
+      const cl=Math.cos(lat), x=cl*Math.cos(lon)*R, y=Math.sin(lat)*R, z=cl*Math.sin(lon)*R;
+      const x1=x*cY+z*sY, z1=-x*sY+z*cY, y2=y*cX-z1*sX, z2=y*sX+z1*cX, s=F/(F-z2);
+      return {x:gx+x1*s, y:gy+y2*s, z:z2};
+    }
+    const LAT=12, LON=24, SEG=48;
+    function frame(){
+      requestAnimationFrame(frame);
+      const win=document.getElementById('w-net');
+      if(!win || !win.classList.contains('open')) return;
+      fitCanvas();
+      const dateOpen=document.getElementById('w-tourdate').classList.contains('open');
+      if(!dragging){ rotY+=velY; rotX+=velX; velX*=0.9; velY*=0.9;   // drag inertia
+        if(Math.abs(velX)<1e-4) velX=0; if(Math.abs(velY)<1e-4) velY=0;
+        if(!dateOpen) rotY+=0.004; }   // gentle auto-spin, paused while a tour date is open
+      rotX=Math.max(-1.3,Math.min(1.3,rotX));
+      const cX=Math.cos(rotX),sX=Math.sin(rotX),cY=Math.cos(rotY),sY=Math.sin(rotY);
+      ctx.clearRect(0,0,W,H);
+      ctx.globalCompositeOperation='lighter';
+      ctx.strokeStyle='rgba(95,175,255,.55)'; ctx.lineWidth=1;
+      ctx.shadowColor='#4da0ff'; ctx.shadowBlur=6;
+      for(let i=1;i<LAT;i++){ const lat=-Math.PI/2+Math.PI*i/LAT; ctx.beginPath();
+        for(let j=0;j<=SEG;j++){ const p=proj(lat,TAU*j/SEG,cX,sX,cY,sY); j?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);} ctx.stroke(); }
+      for(let i=0;i<LON;i++){ const lon=TAU*i/LON; ctx.beginPath();
+        for(let j=0;j<=SEG;j++){ const lat=-Math.PI/2+Math.PI*j/SEG; const p=proj(lat,lon,cX,sX,cY,sY); j?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);} ctx.stroke(); }
+      // pin markers — bright pin on the near side, dark pin on the far side
+      ctx.globalCompositeOperation='source-over'; ctx.shadowBlur=0;
+      markScreen.length=0;
+      const draw=[];
+      for(const s of STOPS){
+        const p=proj(s.lat*D2R, s.lon*D2R, cX,sX,cY,sY);
+        const front=p.z>0, h=(front?0.22:0.17)*R, w=h*PIN_AR;
+        markScreen.push({x:p.x, y:p.y-h*0.45, r:h*0.55, front:front, stop:s});
+        draw.push({x:p.x, y:p.y, h:h, w:w, front:front});
+      }
+      // far pins first, then near pins, so near ones sit on top
+      for(const near of [false,true]){
+        for(const d of draw){
+          if(d.front!==near) continue;
+          const img=d.front?pinFront:pinBack;
+          if(!(img.complete && img.naturalWidth)) continue;
+          if(d.front){ ctx.shadowColor='rgba(0,0,0,.45)'; ctx.shadowBlur=4; ctx.shadowOffsetY=2; }
+          ctx.globalAlpha=d.front?1:0.7;
+          ctx.drawImage(img, d.x-d.w/2, d.y-d.h, d.w, d.h);  // tip at the location point
+          ctx.globalAlpha=1; ctx.shadowBlur=0; ctx.shadowOffsetY=0;
+        }
+      }
+    }
+    frame();
+  })();
+
+  document.querySelectorAll('.dicon').forEach(function(ic){
+    let sx, sy, ox, oy, moving=false, down=false;
+    ic.style.touchAction='none';
+    ic.addEventListener('pointerdown', function(e){
+      if(e.button) return;
+      down=true; moving=false; sx=e.clientX; sy=e.clientY;
+      ox=ic._tx||0; oy=ic._ty||0;
+      ic.style.transition='none';
+      ic.setPointerCapture(e.pointerId);
+    });
+    ic.addEventListener('pointermove', function(e){
+      if(!down) return;
+      const dx=e.clientX-sx, dy=e.clientY-sy;
+      if(!moving && Math.hypot(dx,dy)>4){ moving=true; ic.classList.add('dragging'); }
+      if(moving){ ic._tx=ox+dx; ic._ty=oy+dy; ic.style.transform='translate('+ic._tx+'px,'+ic._ty+'px)'; }
+    });
+    ic.addEventListener('pointerup', function(e){
+      if(!down) return; down=false;
+      try{ ic.releasePointerCapture(e.pointerId); }catch(_){}
+      if(!moving){                                   // it was a click → open the app
+        document.querySelectorAll('.dicon').forEach(d=>d.classList.remove('sel'));
+        ic.classList.add('sel');
+        if(ic.dataset.href){ window.open(ic.dataset.href, '_blank', 'noopener'); }
+        else if(ic.dataset.win==='w-video'){               // Videos: music video above Extras, no overlap
+          openWin('w-extras'); openWin('w-video');
+          const v=document.getElementById('w-video'), e=document.getElementById('w-extras');
+          const gap=16, cx=innerWidth/2, totalH=v.offsetHeight+gap+e.offsetHeight;
+          const sy=Math.max(8, Math.round((innerHeight-32-totalH)/2));
+          v.style.left=Math.round(cx-v.offsetWidth/2)+'px'; v.style.top=sy+'px';
+          e.style.left=Math.round(cx-e.offsetWidth/2)+'px'; e.style.top=(sy+v.offsetHeight+gap)+'px';
+        }
+        else if(ic.dataset.win==='w-net'){                 // Tour: globe + poster, side by side (no overlap), random spot
+          openWin('w-tourposter'); openWin('w-net');
+          const g=document.getElementById('w-net'), pp=document.getElementById('w-tourposter');
+          const gap=22, totalW=pp.offsetWidth+gap+g.offsetWidth, maxH=Math.max(pp.offsetHeight,g.offsetHeight);
+          const sx=Math.round(8+Math.random()*Math.max(0, innerWidth-totalW-16));
+          const sy=Math.round(8+Math.random()*Math.max(0, innerHeight-32-maxH-16));
+          pp.style.left=sx+'px'; pp.style.top=sy+'px';
+          g.style.left=(sx+pp.offsetWidth+gap)+'px'; g.style.top=sy+'px';
+        }
+        else openWin(ic.dataset.win);
+        return;
+      }
+      ic.classList.remove('dragging');
+      const tr = getTrash();
+      if(ic!==tr && overlaps(ic, tr)){               // dropped on Trash → bounce back + notice
+        ic._tx=ox; ic._ty=oy;
+        ic.style.transition='transform .22s ease';
+        ic.style.transform = (ox||oy) ? 'translate('+ox+'px,'+oy+'px)' : '';
+        openWin('w-notice');
+        const nw=document.getElementById('w-notice');
+        nw.style.left=Math.max(0,(innerWidth-nw.offsetWidth)/2)+'px';
+        nw.style.top =Math.max(0,(innerHeight-nw.offsetHeight)/2)+'px';
+      } else if(!snapToGrid(ic)){                     // target box already taken → bounce back
+        ic._tx=ox; ic._ty=oy;
+        ic.style.transition='transform .22s ease';
+        ic.style.transform = (ox||oy) ? 'translate('+ox+'px,'+oy+'px)' : '';
+      }
+    });
+  });
+  // close buttons
+  document.querySelectorAll('[data-close]').forEach(function(x){
+    x.addEventListener('click', function(e){ e.stopPropagation(); closeWin(x.closest('.window')); });
+  });
+  // focus on click anywhere in a window
+  document.querySelectorAll('.window').forEach(function(w){
+    w.addEventListener('pointerdown', ()=> focusWin(w));
+    const bar = w.querySelector('.titlebar');
+    bar.addEventListener('pointerdown', function(e){
+      if(e.target.closest('.tbtn')) return;      // don't start a drag when pressing a titlebar button
+      const r=w.getBoundingClientRect(), dx=e.clientX-r.left, dy=e.clientY-r.top;
+      bar.setPointerCapture(e.pointerId); bar.style.cursor='grabbing';
+      function move(ev){ w.style.left=(ev.clientX-dx)+'px'; w.style.top=Math.max(0,Math.min(innerHeight-40,ev.clientY-dy))+'px'; }
+      function up(){ bar.releasePointerCapture(e.pointerId); bar.style.cursor='grab';
+        bar.removeEventListener('pointermove',move); bar.removeEventListener('pointerup',up); }
+      bar.addEventListener('pointermove',move); bar.addEventListener('pointerup',up);
+    });
+  });
+
+  // start menu
+  const startmenu = document.getElementById('startmenu');
+  document.getElementById('startbtn').addEventListener('click', function(e){ e.stopPropagation(); startmenu.classList.toggle('show'); });
+  document.addEventListener('click', ()=> startmenu.classList.remove('show'));
+  startmenu.querySelectorAll('[data-win]').forEach(function(it){
+    it.addEventListener('click', ()=> openWin(it.dataset.win));
+  });
+  document.getElementById('shutdown').addEventListener('click', function(){ location.reload(); });
+
+  // clock
+  function tick(){ const d=new Date();
+    document.getElementById('clock').textContent = d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+  tick(); setInterval(tick, 15000);
+
+  // XP-style min / max buttons (functional) before each close button
+  function minimizeWin(w){ w.classList.add('mini'); if(openBtns[w.id]) openBtns[w.id].classList.remove('active'); }
+  function toggleMax(w, btn){ w.classList.toggle('max'); btn.textContent = w.classList.contains('max') ? '❐' : '▢'; }
+  document.querySelectorAll('.window .titlebar').forEach(function(tb){
+    const close = tb.querySelector('[data-close]'); if(!close) return;
+    const w = tb.closest('.window');
+    if(w.id==='w-tourdate') return;   // tour-date popup: close only, no min/max
+    const mn = document.createElement('span'); mn.className='tbtn xpbtn'; mn.textContent='–';
+    const mx = document.createElement('span'); mx.className='tbtn xpbtn'; mx.textContent='▢';
+    mn.addEventListener('click', function(e){ e.stopPropagation(); minimizeWin(w); });
+    mx.addEventListener('click', function(e){ e.stopPropagation(); toggleMax(w, mx); });
+    tb.insertBefore(mn, close); tb.insertBefore(mx, close);
+  });
+
+  /* ---- Store products + photo carousels ---- */
+  const M='Mockup/';
+  const PRODUCTS=[
+    {name:'Ghetto Cinderellas Hoodie', variant:'Navy', price:'$60', imgs:[
+      'ghetto hoodie/unisex-essential-eco-cruiser-2.0-hoodie-french-navy-back-6a98fc8e90038.png',
+      'ghetto hoodie/unisex-essential-eco-cruiser-2.0-hoodie-french-navy-front-6a98fc8e8fcda.png']},
+    {name:'Ghetto Cinderellas Hoodie', variant:'White', price:'$60', imgs:[
+      'ghetto hoodie/unisex-essential-eco-cruiser-2.0-hoodie-white-back-6a98fc8e90083.png',
+      'ghetto hoodie/unisex-essential-eco-cruiser-2.0-hoodie-white-front-6a98fc8e8fe35.png']},
+    {name:'Tour Hoodie', variant:'Black', price:'$60', imgs:[
+      'tour hoodie/unisex-essential-eco-cruiser-2.0-hoodie-black-back-6a98fe1dc8181.png',
+      'tour hoodie/unisex-essential-eco-cruiser-2.0-hoodie-black-front-6a98fe1dc7d47.png']},
+    {name:'A Show Of Hands Sweater', variant:'Black', price:'$50', imgs:[
+      'Sweat/unisex-premium-crew-neck-sweatshirt-black-back-6a98fcd1c1b3a.png',
+      'Sweat/unisex-premium-crew-neck-sweatshirt-black-front-6a98fcd1c166c.png']},
+    {name:'Ghetto Cinderellas Tee', variant:'Black', price:'$30', imgs:[
+      'ghetto tee/unisex-classic-tee-black-front-and-back-6a98fd28b314e.png',
+      'ghetto tee/unisex-classic-tee-black-front-6a98fd28b2dbb.png',
+      'ghetto tee/unisex-classic-tee-black-back-6a98fd28b24f1.png']},
+    {name:'Ghetto Cinderellas Tee', variant:'White', price:'$30', imgs:[
+      'ghetto tee 2/unisex-classic-tee-white-front-and-back-6a98fd602820b.png',
+      'ghetto tee 2/unisex-classic-tee-white-front-6a98fd60280b7.png',
+      'ghetto tee 2/unisex-classic-tee-white-back-6a98fd6027e14.png']},
+    {name:'How Many Of Us Tee', variant:'Black', price:'$30', imgs:[
+      'how many black/unisex-classic-tee-black-front-and-back-6a98fdc29bf80.png',
+      'how many black/unisex-classic-tee-black-front-6a98fdc29bca2.png',
+      'how many black/unisex-classic-tee-black-back-6a98fdc29b8ba.png']},
+    {name:'How Many Of Us Tee', variant:'White', price:'$30', imgs:[
+      'how many white/unisex-classic-tee-white-front-and-back-6a98fd985a686.png',
+      'how many white/unisex-classic-tee-white-front-6a98fd985a317.png',
+      'how many white/unisex-classic-tee-white-back-6a98fd9859e2b.png']},
+    {name:'Deaf Ear Tee', variant:'White', price:'$30', imgs:[
+      'phone tee/unisex-classic-tee-white-front-and-back-6a98fdf337278.png',
+      'phone tee/unisex-classic-tee-white-front-6a98fdf336e4b.png',
+      'phone tee/unisex-classic-tee-white-back-6a98fdf336990.png']},
+    {name:'Tour Cap', variant:'Royal / White', price:'$25', imgs:[
+      'cap/5-panel-trucker-cap-royal-white-royal-front-6a98fe59a430e.png',
+      'cap/5-panel-trucker-cap-royal-white-royal-left-front-6a98fe59a49a4.png',
+      'cap/5-panel-trucker-cap-royal-white-royal-right-6a98fe59a4831.png',
+      'cap/5-panel-trucker-cap-royal-white-royal-back-6a98fe59a4674.png']},
+    {name:'Tour Poster', variant:'A2 print', price:'$20', imgs:[
+      'tour poster 1.png']},
+    {name:'FRENDZ \u2014 Vinyl', variant:'12"', price:'$15', imgs:[
+      'vinyl 1.png', 'vinyl 2.png', 'vinyl 3.png']},
+    {name:'FRENDZ \u2014 CD', variant:'Disc', price:'$10', imgs:[
+      'cd 1.png', 'cd 2.png', 'cd-3-web.png']},
+    {name:'FRENDZ \u2014 Cassette', variant:'Tape', price:'$10', imgs:[
+      'cassette 1.png', 'cassette-2-web.png', 'cassette 3.png']},
+    {name:'FRENDZ \u2014 Digital Single', variant:'Download', price:'$2', imgs:[
+      'vinyl 3.png']},
+    {name:'Brewski Brick', variant:'Light Blue', price:'$999', imgs:[
+      'Brewski phone 2.png', 'Brewski phone 4.png', 'Brewski phone 3.png']}
+  ];
+  // per-product blurb, indexed to PRODUCTS order
+  const DESCS=[
+    'Celebrate the ghetto cinderellas out there by purchasing this 100% cotton hoodie.',
+    'Celebrate the ghetto cinderellas out there by purchasing this 100% cotton hoodie.',
+    'Celebrate For My Frendz Around The World Tour by purchasing this 100% cotton hoodie.',
+    'Show off your hands by purchasing this 100% cotton sweater.',
+    'Celebrate the ghetto cinderellas out there by purchasing this 100% cotton tee.',
+    'Celebrate the ghetto cinderellas out there by purchasing this 100% cotton tee.',
+    'Celebrate your frendz by purchasing this 100% cotton tee.',
+    'Celebrate your frendz by purchasing this 100% cotton tee.',
+    'Don’t turn a deaf ear by purchasing this 100% cotton tee.',
+    'Celebrate For My Frendz Around The World Tour by purchasing this trucker cap.',
+    'Celebrate For My Frendz Around The World Tour by purchasing this A2 poster.',
+    'Own your copy of FRENDZ by purchasing this 7" vinyl.\nSide A — FRENDZ   ·   Side B — FRENDZ INSTRUMENTAL',
+    'Own your copy of FRENDZ by purchasing this limited-edition signed CD.\nSide A — FRENDZ   ·   Side B — FRENDZ INSTRUMENTAL',
+    'Own your copy of FRENDZ by purchasing this limited-edition signed cassette.',
+    'Listen to FRENDZ anywhere and everywhere by purchasing this digital copy.',
+    'Purchase this FRENDZ phone to stay in touch with your ‘frendz’.'
+  ];
+  (function(){
+    const grid=document.getElementById('shop-grid'); if(!grid) return;
+    const winHost=document.getElementById('w-shop').parentNode;
+
+    /* ---- basket ---- */
+    const cart=[];
+    function priceNum(x){ return parseFloat(String(x).replace(/[^0-9.]/g,''))||0; }
+    function money(n){ return '$'+(Number.isInteger(n)?n:n.toFixed(2)); }
+    function cartCount(){ return cart.reduce(function(s,i){ return s+i.qty; },0); }
+    function updateCartBtn(){ const b=document.getElementById('cart-btn'); if(b) b.textContent='Basket ('+cartCount()+')'; }
+    function addToCart(p, size, qty){
+      const key=p.name+'|'+(p.variant||'')+'|'+(size||'');
+      const ex=cart.find(function(i){ return i.key===key; });
+      if(ex) ex.qty+=qty; else cart.push({key:key, name:p.name, variant:p.variant||'', size:size||'', price:priceNum(p.price), qty:qty});
+      updateCartBtn(); renderCart();
+    }
+    function removeLine(key){ const i=cart.findIndex(function(x){ return x.key===key; }); if(i>=0) cart.splice(i,1); updateCartBtn(); renderCart(); }
+    function renderCart(){
+      const body=document.getElementById('cart-body'); if(!body) return;
+      body.innerHTML='';
+      const h=document.createElement('h3'); h.textContent='Your basket'; body.appendChild(h);
+      if(!cart.length){ const e=document.createElement('div'); e.style.opacity='.7'; e.textContent='Your basket is empty.'; body.appendChild(e); return; }
+      let total=0;
+      cart.forEach(function(it){
+        const line=it.price*it.qty; total+=line;
+        const row=document.createElement('div'); row.className='cart-line';
+        const left=document.createElement('div');
+        const nm=document.createElement('div'); nm.style.fontWeight='bold'; nm.textContent=it.name;
+        const sub=document.createElement('div'); sub.style.cssText='font-size:11px;opacity:.7';
+        sub.textContent=[it.variant, it.size?('Size '+it.size):'', '×'+it.qty].filter(Boolean).join('   ·   ');
+        left.appendChild(nm); left.appendChild(sub);
+        const right=document.createElement('div'); right.style.cssText='text-align:right; white-space:nowrap';
+        const price=document.createElement('div'); price.style.fontWeight='bold'; price.textContent=money(line);
+        const rm=document.createElement('span'); rm.className='cl-rm'; rm.textContent='Remove';
+        rm.addEventListener('click', function(){ removeLine(it.key); });
+        right.appendChild(price); right.appendChild(rm);
+        row.appendChild(left); row.appendChild(right); body.appendChild(row);
+      });
+      const tot=document.createElement('div'); tot.className='cart-total';
+      const tl=document.createElement('span'); tl.textContent='Total'; const tv=document.createElement('span'); tv.textContent=money(total);
+      tot.appendChild(tl); tot.appendChild(tv); body.appendChild(tot);
+      const co=document.createElement('div'); co.style.cssText='text-align:center;margin-top:14px';
+      const btn=document.createElement('span'); btn.className='btn raised'; btn.textContent='Checkout';
+      btn.addEventListener('click', function(){ openWin('w-broke');
+        const bw=document.getElementById('w-broke');
+        bw.style.left=Math.max(0,(innerWidth-bw.offsetWidth)/2)+'px';
+        bw.style.top =Math.max(0,(innerHeight-bw.offsetHeight)/2)+'px'; });
+      co.appendChild(btn); body.appendChild(co);
+    }
+    const cartBtn=document.getElementById('cart-btn');
+    if(cartBtn) cartBtn.addEventListener('click', function(){ renderCart(); openWin('w-cart'); });
+    updateCartBtn(); renderCart();
+    // "too broke" notice OK → back to the store
+    const brokeOk=document.getElementById('broke-ok');
+    if(brokeOk) brokeOk.addEventListener('click', function(){
+      const c=document.getElementById('w-cart'); if(c) closeWin(c);
+      const s=document.getElementById('w-shop'); if(s) focusWin(s); });
+
+    // build a carousel thumb (own state) reusable in the grid card and the big product window
+    function makeThumb(p){
+      const thumb=document.createElement('div'); thumb.className='thumb';
+      const slides=document.createElement('div'); slides.className='slides';
+      p.imgs.forEach(function(src,idx){ const im=new Image(); im.src=M+src; im.alt='';
+        if(idx) im.loading='lazy'; if(idx===0) im.className='on'; slides.appendChild(im); });
+      thumb.appendChild(slides);
+      if(p.imgs.length>1){
+        const prev=document.createElement('button'); prev.type='button'; prev.className='nav prev'; prev.textContent='‹';
+        const next=document.createElement('button'); next.type='button'; next.className='nav next'; next.textContent='›';
+        const dots=document.createElement('div'); dots.className='dots';
+        p.imgs.forEach(function(_,idx){ const d=document.createElement('i'); if(idx===0)d.className='on'; dots.appendChild(d); });
+        const ims=[...slides.children], ds=[...dots.children]; let i=0;
+        function show(n){ ims[i].classList.remove('on'); ds[i].classList.remove('on');
+          i=(n+ims.length)%ims.length; ims[i].classList.add('on'); ds[i].classList.add('on'); }
+        prev.addEventListener('click', function(e){ e.stopPropagation(); show(i-1); });
+        next.addEventListener('click', function(e){ e.stopPropagation(); show(i+1); });
+        thumb.appendChild(prev); thumb.appendChild(next); thumb.appendChild(dots);
+      }
+      return thumb;
+    }
+
+    // wire a dynamically-created window into the OS (focus, drag, close, min/max)
+    function wireWindow(w){
+      const bar=w.querySelector('.titlebar'), close=bar.querySelector('[data-close]');
+      w.addEventListener('pointerdown', function(){ focusWin(w); });
+      close.addEventListener('click', function(e){ e.stopPropagation(); closeWin(w); });
+      bar.addEventListener('pointerdown', function(e){
+        if(e.target.closest('.tbtn')) return;
+        const r=w.getBoundingClientRect(), dx=e.clientX-r.left, dy=e.clientY-r.top;
+        bar.setPointerCapture(e.pointerId); bar.style.cursor='grabbing';
+        function move(ev){ w.style.left=(ev.clientX-dx)+'px'; w.style.top=Math.max(0,Math.min(innerHeight-40,ev.clientY-dy))+'px'; }
+        function up(){ try{bar.releasePointerCapture(e.pointerId);}catch(_){} bar.style.cursor='grab';
+          bar.removeEventListener('pointermove',move); bar.removeEventListener('pointerup',up); }
+        bar.addEventListener('pointermove',move); bar.addEventListener('pointerup',up);
+      });
+      const mn=document.createElement('span'); mn.className='tbtn xpbtn'; mn.textContent='–';
+      mn.addEventListener('click', function(e){ e.stopPropagation(); minimizeWin(w); });
+      bar.insertBefore(mn, close);   // minimise + close only (no maximise)
+    }
+
+    // a bigger detail view, opened as its own window/tab
+    const prodWins={};
+    function openProduct(p, idx){
+      const id='w-prod-'+idx;
+      if(!prodWins[id]){
+        const w=document.createElement('div'); w.className='window raised'; w.id=id; w.style.width='min(430px,94vw)';
+        const tb=document.createElement('div'); tb.className='titlebar';
+        const t=document.createElement('span'); t.className='t'; t.textContent=p.name+(p.variant?' — '+p.variant:'');
+        const cl=document.createElement('span'); cl.className='tbtn raised'; cl.setAttribute('data-close',''); cl.textContent='✕';
+        tb.appendChild(t); tb.appendChild(cl);
+        const content=document.createElement('div'); content.className='content'; content.style.textAlign='center'; content.style.maxHeight='none';
+        const thumb=makeThumb(p); thumb.style.width='min(320px,40vh)'; thumb.style.margin='0 auto';
+        const h=document.createElement('div'); h.style.cssText='font-size:17px;font-weight:bold;margin-top:12px'; h.textContent=p.name;
+        const meta=document.createElement('div'); meta.style.cssText='margin-top:5px;font-size:14px'; meta.innerHTML='<span style="opacity:.7"></span><span style="font-weight:bold"></span>';
+        meta.children[0].textContent=(p.variant?p.variant+'   ':''); meta.children[1].textContent=p.price;
+        const note=document.createElement('div'); note.style.cssText='margin-top:10px;font-size:12px;opacity:.8;line-height:1.5;white-space:pre-line;max-width:340px;margin:10px auto 0'; note.textContent=DESCS[idx]||'';
+        content.appendChild(thumb); content.appendChild(h); content.appendChild(meta); content.appendChild(note);
+
+        // size picker (clothing only) — XS to XL
+        const isClothing=/Hoodie|Sweater|Tee/.test(p.name);
+        let selectedSize = isClothing ? 'M' : '';
+        if(isClothing){
+          const sl=document.createElement('div'); sl.className='lbl-row'; sl.textContent='Size';
+          const sizeRow=document.createElement('div'); sizeRow.style.cssText='display:flex; gap:6px; justify-content:center; margin-top:6px';
+          ['XS','S','M','L','XL'].forEach(function(sz){
+            const b=document.createElement('span'); b.className='sizebtn'+(sz==='M'?' on':''); b.textContent=sz;
+            b.addEventListener('click', function(e){ e.stopPropagation(); selectedSize=sz;
+              sizeRow.querySelectorAll('.sizebtn').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); });
+            sizeRow.appendChild(b);
+          });
+          content.appendChild(sl); content.appendChild(sizeRow);
+        }
+
+        // quantity stepper
+        let qty=1;
+        const ql=document.createElement('div'); ql.className='lbl-row'; ql.textContent='Quantity';
+        const qtyRow=document.createElement('div'); qtyRow.className='qtyrow';
+        const minus=document.createElement('span'); minus.className='qbtn'; minus.textContent='−';
+        const qnum=document.createElement('span'); qnum.className='qnum'; qnum.textContent='1';
+        const plus=document.createElement('span'); plus.className='qbtn'; plus.textContent='+';
+        minus.addEventListener('click', function(e){ e.stopPropagation(); qty=Math.max(1,qty-1); qnum.textContent=qty; });
+        plus.addEventListener('click', function(e){ e.stopPropagation(); qty=Math.min(20,qty+1); qnum.textContent=qty; });
+        qtyRow.appendChild(minus); qtyRow.appendChild(qnum); qtyRow.appendChild(plus);
+        content.appendChild(ql); content.appendChild(qtyRow);
+
+        const add=document.createElement('span'); add.className='btn raised'; add.textContent='Add to basket'; add.style.marginTop='16px';
+        add.addEventListener('click', function(e){ e.stopPropagation(); addToCart(p, selectedSize, qty);
+          add.textContent='Added ✓'; setTimeout(function(){ closeWin(w); add.textContent='Add to basket'; }, 500); });
+        content.appendChild(document.createElement('br')); content.appendChild(add);
+        w.appendChild(tb); w.appendChild(content);
+        winHost.appendChild(w); wireWindow(w); prodWins[id]=w;
+      }
+      openWin(id);
+    }
+
+    PRODUCTS.forEach(function(p, idx){
+      const card=document.createElement('div'); card.className='prod'; card.style.cursor='pointer'; card.title='View';
+      card.appendChild(makeThumb(p));
+      const name=document.createElement('div'); name.className='pname'; name.textContent=p.name;
+      const meta=document.createElement('div'); meta.className='pmeta';
+      meta.innerHTML='<span class="pvar"></span><span class="pprice"></span>';
+      meta.children[0].textContent=p.variant; meta.children[1].textContent=p.price;
+      const btn=document.createElement('div'); btn.className='btn raised'; btn.textContent='Add';
+      btn.addEventListener('click', function(e){ e.stopPropagation(); openProduct(p, idx); });
+      card.appendChild(name); card.appendChild(meta); card.appendChild(btn);
+      card.addEventListener('click', function(){ openProduct(p, idx); });
+      grid.appendChild(card);
+    });
+  })();
+
+  /* ---- Photos gallery: 20 empty cells, each with a title slot ---- */
+  (function(){
+    const pg=document.getElementById('photo-grid'); if(!pg) return;
+    for(let i=0;i<20;i++){
+      const cell=document.createElement('div'); cell.className='photo-cell';
+      const frame=document.createElement('div'); frame.className='photo-frame';
+      const box=document.createElement('div'); box.className='sunken photo-box';
+      const title=document.createElement('div'); title.className='photo-title';
+      frame.appendChild(box); cell.appendChild(frame); cell.appendChild(title); pg.appendChild(cell);
+    }
+  })();
+
+  /* ---- Music player (simulated playback until an audio file is added) ---- */
+  (function(){
+    const root=document.getElementById('w-music'); if(!root) return;
+    const play=root.querySelector('[data-play]'), fill=root.querySelector('.mp-fill'),
+          cur=root.querySelector('.mp-cur'), seek=root.querySelector('.mp-seek'),
+          prev=root.querySelector('[data-prev]');
+    const DUR=178;   // 2:58
+    let t=0, playing=false, timer=null;
+    function fmt(s){ s=Math.max(0,Math.floor(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+    function render(){ fill.style.width=(t/DUR*100)+'%'; cur.textContent=fmt(t); }
+    function stop(){ playing=false; play.textContent='▶'; clearInterval(timer); }
+    function start(){ playing=true; play.textContent='❚❚'; timer=setInterval(function(){ t+=1; if(t>=DUR){ t=0; stop(); } render(); },1000); }
+    play.addEventListener('click', function(){ playing?stop():start(); });
+    prev.addEventListener('click', function(){ t=0; render(); });
+    seek.addEventListener('click', function(e){ const r=seek.getBoundingClientRect(); t=Math.round((e.clientX-r.left)/r.width*DUR); render(); });
+    render();
+  })();
+
+  /* ---- Links: socials open a "not that sociable" notice ---- */
+  document.querySelectorAll('[data-social]').forEach(function(el){
+    el.addEventListener('click', function(){
+      openWin('w-social');
+      const sw=document.getElementById('w-social');
+      sw.style.left=Math.max(0,(innerWidth-sw.offsetWidth)/2)+'px';
+      sw.style.top =Math.max(0,(innerHeight-sw.offsetHeight)/2)+'px';
+    });
+  });
+</script>
+</body>
+</html>

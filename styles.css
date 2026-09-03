@@ -1,0 +1,143 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: #000;
+  color: #fff;
+  font-family: Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+.stage {
+  position: relative;
+  width: 100vw;
+  min-height: 200vh;
+}
+
+.title {
+  position: absolute;
+  top: 50vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  font-size: clamp(48px, 10vw, 140px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  line-height: 1;
+  color: #fff;
+  mix-blend-mode: difference;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tag {
+  position: absolute;
+  top: calc(50vh + clamp(48px, 10vw, 140px) * 0.6 + 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 14px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: .6;
+}
+
+/* =========================================================
+   FLOATERS
+   ========================================================= */
+.floater {
+  position: absolute;
+  object-fit: contain;
+  z-index: 1;
+  animation: float 12s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* --- specific placements --- */
+
+/* top center, small, no bobbing */
+.floater--15 { top: 2vh;   left: 50%; width: 5vw;  margin-left: -2.5vw; }
+
+/* through the headline */
+.floater--3  { top: 42vh;  left:  6%; width: 24vw; animation-delay: -2s; }
+.floater--16 { top: 34vh;  right: 12%; width: 17vw; animation-delay: -4s; }
+
+/* middle center — 11 close to 7 so they overlap */
+.floater--11 { top: 122vh; left: 50%; width: 14vw; margin-left:  -7vw; animation-delay: -1s; z-index: 2; cursor: pointer; }
+
+/* three small copies of img-11, revealed on click */
+.mini {
+  width: 9vw;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 3s ease, transform 3s ease;
+  z-index: 4;
+}
+/* three near the heading/subheading — above, left, right */
+.mini--a { top: 83vh; left: 50%; margin-left: -4.5vw; transform: translateY(20px);  animation-delay: -2s; }
+.mini--b { top: 99vh; left: 22%;                     transform: translate(30px, 0); animation-delay: -4s; }
+.mini--c { top: 99vh; right: 22%;                    transform: translate(-30px, 0); animation-delay: -6s; }
+
+body.revealed .mini { opacity: 1; transform: translate(0, 0); }
+
+/* small logos centered inside the top and left minis, behind the rings */
+.logo {
+  width: 4vw;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 3s ease;
+  z-index: 2;
+}
+.logo--choc { top: 88vh;  left: 50%; margin-left: -2vw; animation-delay: -2s; }
+.logo--bd     { top: 104vh; left: calc(22% + 2.5vw);      animation-delay: -4s; }
+.logo--frendz { top: 102.5vh; right: calc(22% - 0.5vw); width: 10vw; animation-delay: -6s; }
+
+body.revealed .logo { opacity: 1; }
+
+/* choc logo wraps in an anchor — image fills the slot, link clickable once revealed */
+a.logo img { width: 100%; display: block; }
+body.revealed a.logo { pointer-events: auto; cursor: pointer; }
+.floater--7  { top: 135vh; left: 50%; width: 18vw; margin-left:  -9vw; animation-delay: -3s; }
+
+/* --- modifiers --- */
+.floater--static { animation: none; }
+.floater--flip   { animation-name: float-flip; }
+@keyframes float-flip {
+  0%, 100% { transform: scaleX(-1) translate(0, 0)      rotate(-2deg); }
+  25%      { transform: scaleX(-1) translate(10px,-14px) rotate(1.5deg); }
+  50%      { transform: scaleX(-1) translate(-8px,-6px)  rotate(-1deg); }
+  75%      { transform: scaleX(-1) translate(6px, 12px)  rotate(2deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(-2deg); }
+  25%      { transform: translate(10px, -14px) rotate(1.5deg); }
+  50%      { transform: translate(-8px, -6px) rotate(-1deg); }
+  75%      { transform: translate(6px, 12px) rotate(2deg); }
+}
+
+/* item on the LEFT, pointing inward (top leans right) */
+@keyframes float-in-left {
+  0%, 100% { transform: translate(0, 0)      rotate(28deg); }
+  25%      { transform: translate(8px,-12px) rotate(31deg); }
+  50%      { transform: translate(-6px,-4px) rotate(26deg); }
+  75%      { transform: translate(6px, 10px) rotate(30deg); }
+}
+
+/* item on the RIGHT, pointing inward (top leans left) */
+@keyframes float-in-right {
+  0%, 100% { transform: translate(0, 0)      rotate(-28deg); }
+  25%      { transform: translate(-8px,-12px) rotate(-31deg); }
+  50%      { transform: translate(6px,-4px)   rotate(-26deg); }
+  75%      { transform: translate(-6px, 10px) rotate(-30deg); }
+}
+
+@media (max-width: 720px) {
+  .floater { width: 40vw !important; }
+  .floater--15 { width: 16vw !important; margin-left: -8vw !important; }
+  .title { white-space: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floater { animation: none; }
+}
