@@ -219,6 +219,16 @@
   #w-video.max .content, #w-extras.max .content{display:flex; flex-direction:column}
   #w-video.max .content h3, #w-extras.max .content h3{flex:0 0 auto}
   #w-video.max .vid-box, #w-extras.max .vid-box{flex:1; height:auto}   /* video fills most of the screen */
+  /* Extras = portrait tour advert (9:16) — window fits the video */
+  #w-extras{min-width:0}
+  #w-extras .content{max-height:none; padding:11px; overflow:hidden}
+  #w-extras .tour-advert{width:100%; aspect-ratio:1080/1920; display:block; background:#000; border-radius:3px}
+  /* keep native controls from darkening the video (WebKit/Safari) */
+  #w-extras video::-webkit-media-controls-panel{background:transparent; background-image:none}
+  #w-extras video::-webkit-media-controls-enclosure{background:transparent}
+  #w-extras.max .content{display:flex; flex-direction:column}
+  #w-extras.max .content h3{flex:0 0 auto}
+  #w-extras.max .tour-advert{flex:1; aspect-ratio:auto; height:auto; min-height:0; object-fit:contain}
 
   /* Links — socials */
   .social-list{display:flex; flex-direction:column; gap:7px; margin-top:4px}
@@ -266,11 +276,11 @@
     <div class="dbar"></div>
     <div class="icons">
       <div class="dicon" data-win="w-recycle" data-col="0" data-row="0"><div class="ico" style="background-image:url('trash.png')"></div><div class="lbl">Trash</div></div>
-      <div class="dicon" data-win="w-video" data-col="0" data-row="1"><div class="ico" style="background-image:url('film.png')"></div><div class="lbl">Videos</div></div>
-      <div class="dicon" data-win="w-music" data-col="0" data-row="2"><div class="ico" style="background-image:url('cd.png')"></div><div class="lbl">Music</div></div>
-      <div class="dicon" data-win="w-photos" data-col="0" data-row="3"><div class="ico" style="background-image:url('camera-removebg-preview.png')"></div><div class="lbl">Photos</div></div>
-      <div class="dicon" data-win="w-net" data-col="0" data-row="4"><div class="ico" style="background-image:url('world-removebg-preview.png')"></div><div class="lbl">Tour</div></div>
-      <div class="dicon" data-win="w-shop" data-col="0" data-row="5"><div class="ico" style="background-image:url('cart-removebg-preview.png')"></div><div class="lbl">Store</div></div>
+      <div class="dicon" data-win="w-video" data-col="0" data-row="1"><div class="ico" style="background-image:url('film.png')"></div><div class="lbl">Video</div></div>
+      <div class="dicon" data-win="w-net" data-col="0" data-row="2"><div class="ico" style="background-image:url('world-removebg-preview.png')"></div><div class="lbl">Tour</div></div>
+      <div class="dicon" data-win="w-music" data-col="0" data-row="3"><div class="ico" style="background-image:url('cd.png')"></div><div class="lbl">Music</div></div>
+      <div class="dicon" data-win="w-shop" data-col="0" data-row="4"><div class="ico" style="background-image:url('cart-removebg-preview.png')"></div><div class="lbl">Store</div></div>
+      <div class="dicon" data-win="w-photos" data-col="0" data-row="5"><div class="ico" style="background-image:url('camera-removebg-preview.png')"></div><div class="lbl">Photos</div></div>
       <div class="dicon" data-win="w-join" data-col="0" data-row="6"><div class="ico" style="background-image:url('mail.png')"></div><div class="lbl">Sign Up</div></div>
       <div class="dicon" data-win="w-contact" data-col="1" data-row="0"><div class="ico" style="background-image:url('phone.png')"></div><div class="lbl">Contact</div></div>
       <div class="dicon" data-win="w-about" data-col="1" data-row="1"><div class="ico" style="background-image:url('light.png')"></div><div class="lbl">Links</div></div>
@@ -311,15 +321,15 @@
 
     <div class="window raised" id="w-video" style="left:220px; top:120px; width:480px">
       <div class="titlebar"><span class="t">Videos</span><span class="tbtn raised" data-close>✕</span></div>
-      <div class="content"><h3>Music video</h3>
+      <div class="content">
         <div class="sunken vid-box">[ video goes here ]</div>
       </div>
     </div>
 
-    <div class="window raised" id="w-extras" style="left:220px; top:120px; width:380px">
-      <div class="titlebar"><span class="t">Videos</span><span class="tbtn raised" data-close>✕</span></div>
-      <div class="content"><h3>Extras</h3>
-        <div class="sunken vid-box vid-box-sm">[ video goes here ]</div>
+    <div class="window raised" id="w-extras" style="left:220px; top:120px; width:260px">
+      <div class="titlebar"><span class="t">Tour</span><span class="tbtn raised" data-close>✕</span></div>
+      <div class="content">
+        <video class="tour-advert" src="tour advert.mov" controls playsinline preload="metadata"></video>
       </div>
     </div>
 
@@ -332,8 +342,7 @@
       <div class="titlebar"><span class="t">Store</span><span class="tbtn raised" data-close>✕</span></div>
       <div class="content">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px">
-          <div><h3 style="margin-bottom:2px">Store</h3>
-            <div class="shop-sub">Shop the newest styles to look fly in front of your frendz</div></div>
+          <div><div class="shop-sub" style="margin:0">Shop the newest styles to look fly in front of your frendz</div></div>
           <span class="btn raised" id="cart-btn" style="white-space:nowrap">Basket (0)</span>
         </div>
         <div class="shop-grid" id="shop-grid"></div>
@@ -372,7 +381,7 @@
 
     <div class="window raised" id="w-photos" style="left:240px; top:100px; width:420px">
       <div class="titlebar"><span class="t">Photos</span><span class="tbtn raised" data-close>✕</span></div>
-      <div class="content"><h3>Gallery</h3>
+      <div class="content">
         <div class="photo-grid" id="photo-grid"></div>
       </div>
     </div>
@@ -391,7 +400,7 @@
 
     <div class="window raised" id="w-about" style="left:280px; top:110px; width:340px">
       <div class="titlebar"><span class="t">Links</span><span class="tbtn raised" data-close>✕</span></div>
-      <div class="content"><h3>Links</h3>
+      <div class="content">
         <div class="social-list">
           <div class="social" data-social><img src="icons/53c4366201a1a2e578272a502ffdd3e8-removebg-preview.png" alt=""><span class="s-name">Instagram</span><span class="s-handle">@BREWSKI</span></div>
           <div class="social" data-social><img src="icons/tik tok icon.png" alt=""><span class="s-name">TikTok</span><span class="s-handle">@BREWSKI</span></div>
@@ -559,6 +568,27 @@
   function closeWin(w){
     w.classList.remove('open');
     if(openBtns[w.id]){ openBtns[w.id].remove(); delete openBtns[w.id]; }
+    // stop any playing video/audio in the closed window
+    w.querySelectorAll('video, audio').forEach(function(m){ try{ m.pause(); m.currentTime=0; }catch(_){} });
+  }
+  // open several windows as a loosely-staggered, slightly-overlapping cluster at a random spot
+  function openCluster(ids){
+    ids.forEach(function(id){ openWin(id); });
+    if(innerWidth<=640) return;               // phones: leave openWin's own placement
+    const wins=ids.map(function(id){ return document.getElementById(id); });
+    const overlap=34, vJit=46;
+    let totalW=0; wins.forEach(function(w,i){ totalW += w.offsetWidth - (i>0?overlap:0); });
+    const maxH=Math.max.apply(null, wins.map(function(w){ return w.offsetHeight; }));
+    let bx=Math.max(8, Math.min(Math.round((innerWidth-totalW)/2 + (Math.random()*90-45)), innerWidth-totalW-8));
+    if(!isFinite(bx)||bx<8) bx=8;
+    let by=Math.max(8, Math.round((innerHeight-32-maxH-vJit)/2 + (Math.random()*60-30)));
+    let x=bx;
+    wins.forEach(function(w,i){
+      if(i>0) x += wins[i-1].offsetWidth - overlap;
+      let left=Math.max(8, Math.min(x, innerWidth - w.offsetWidth - 8));
+      let top=Math.max(8, Math.min(by + Math.round(Math.random()*vJit), innerHeight-32 - w.offsetHeight - 8));
+      w.style.left=left+'px'; w.style.top=top+'px';
+    });
   }
 
   // desktop icons open windows
@@ -750,38 +780,8 @@
         document.querySelectorAll('.dicon').forEach(d=>d.classList.remove('sel'));
         ic.classList.add('sel');
         if(ic.dataset.href){ window.open(ic.dataset.href, '_blank', 'noopener'); }
-        else if(ic.dataset.win==='w-music'){               // Music: player + Spotify link, side by side (no overlap)
-          openWin('w-spotify'); openWin('w-music');
-          if(innerWidth>640){
-            const m=document.getElementById('w-music'), s=document.getElementById('w-spotify');
-            const gap=22, totalW=m.offsetWidth+gap+s.offsetWidth, maxH=Math.max(m.offsetHeight,s.offsetHeight);
-            const sx=Math.round(8+Math.random()*Math.max(0, innerWidth-totalW-16));
-            const sy=Math.round(8+Math.random()*Math.max(0, innerHeight-32-maxH-16));
-            m.style.left=sx+'px'; m.style.top=sy+'px';
-            s.style.left=(sx+m.offsetWidth+gap)+'px'; s.style.top=sy+'px';
-          }
-        }
-        else if(ic.dataset.win==='w-video'){               // Videos: music video above Extras, no overlap
-          openWin('w-extras'); openWin('w-video');
-          if(innerWidth>640){                              // desktop layout only
-            const v=document.getElementById('w-video'), e=document.getElementById('w-extras');
-            const gap=16, cx=innerWidth/2, totalH=v.offsetHeight+gap+e.offsetHeight;
-            const sy=Math.max(8, Math.round((innerHeight-32-totalH)/2));
-            v.style.left=Math.round(cx-v.offsetWidth/2)+'px'; v.style.top=sy+'px';
-            e.style.left=Math.round(cx-e.offsetWidth/2)+'px'; e.style.top=(sy+v.offsetHeight+gap)+'px';
-          }
-        }
-        else if(ic.dataset.win==='w-net'){                 // Tour: globe + poster, side by side (no overlap), random spot
-          openWin('w-tourposter'); openWin('w-net');
-          if(innerWidth>640){                              // desktop layout only
-            const g=document.getElementById('w-net'), pp=document.getElementById('w-tourposter');
-            const gap=22, totalW=pp.offsetWidth+gap+g.offsetWidth, maxH=Math.max(pp.offsetHeight,g.offsetHeight);
-            const sx=Math.round(8+Math.random()*Math.max(0, innerWidth-totalW-16));
-            const sy=Math.round(8+Math.random()*Math.max(0, innerHeight-32-maxH-16));
-            pp.style.left=sx+'px'; pp.style.top=sy+'px';
-            g.style.left=(sx+pp.offsetWidth+gap)+'px'; g.style.top=sy+'px';
-          }
-        }
+        else if(ic.dataset.win==='w-music'){ openCluster(['w-music','w-spotify']); }        // Music: player + Spotify
+        else if(ic.dataset.win==='w-net'){ openCluster(['w-tourposter','w-net','w-extras']); } // Tour: poster + globe + advert
         else openWin(ic.dataset.win);
         return;
       }
