@@ -10,7 +10,7 @@ html, body {
 .stage {
   position: relative;
   width: 100vw;
-  min-height: 200vh;
+  min-height: 150vh;
 }
 
 .title {
@@ -62,42 +62,23 @@ html, body {
 .floater--3  { top: 42vh;  left:  6%; width: 24vw; animation-delay: -2s; }
 .floater--16 { top: 34vh;  right: 12%; width: 17vw; animation-delay: -4s; }
 
-/* middle center — 11 close to 7 so they overlap */
-.floater--11 { top: 122vh; left: 50%; width: 14vw; margin-left:  -7vw; animation-delay: -1s; z-index: 2; cursor: pointer; }
-
-/* three small copies of img-11, revealed on click */
-.mini {
-  width: 9vw;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 3s ease, transform 3s ease;
-  z-index: 4;
-}
-/* three near the heading/subheading — above, left, right */
-.mini--a { top: 83vh; left: 50%; margin-left: -4.5vw; transform: translateY(20px);  animation-delay: -2s; }
-.mini--b { top: 99vh; left: 22%;                     transform: translate(30px, 0); animation-delay: -4s; }
-.mini--c { top: 99vh; right: 22%;                    transform: translate(-30px, 0); animation-delay: -6s; }
-
-body.revealed .mini { opacity: 1; transform: translate(0, 0); }
-
-/* small logos centered inside the top and left minis, behind the rings */
+/* =========================================================
+   THE THREE LOGOS — always visible across the lower half.
+   CHOC and FRENDZ (NEA) are clickable links; BD is just the mark.
+   ========================================================= */
 .logo {
-  width: 4vw;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 3s ease;
+  top: 112vh;
+  width: 14vw;
+  opacity: 1;
   z-index: 2;
 }
-.logo--choc { top: 88vh;  left: 50%; margin-left: -2vw; animation-delay: -2s; }
-.logo--bd     { top: 104vh; left: calc(22% + 2.5vw);      animation-delay: -4s; }
-.logo--frendz { top: 102.5vh; right: calc(22% - 0.5vw); width: 10vw; animation-delay: -6s; }
+.logo--choc   { left: 20%;  margin-left: -7vw; animation-delay: -2s; }
+.logo--bd     { left: 50%;  margin-left: -7vw; animation-delay: -4s; }
+.logo--frendz { right: 20%; margin-right: -9vw; width: 18vw; animation-delay: -6s; }
 
-body.revealed .logo { opacity: 1; }
-
-/* choc logo wraps in an anchor — image fills the slot, link clickable once revealed */
+/* anchors fill their slot and stay clickable */
+a.logo { pointer-events: auto; cursor: pointer; }
 a.logo img { width: 100%; display: block; }
-body.revealed a.logo { pointer-events: auto; cursor: pointer; }
-.floater--7  { top: 135vh; left: 50%; width: 18vw; margin-left:  -9vw; animation-delay: -3s; }
 
 /* --- modifiers --- */
 .floater--static { animation: none; }
@@ -138,13 +119,11 @@ body.revealed a.logo { pointer-events: auto; cursor: pointer; }
   .title { white-space: normal; }
 
   /* phone: stack the three portal logos vertically, centred + tappable, no overlap */
-  .logo { left: 50% !important; right: auto !important; width: 34vw !important; margin-left: -17vw !important; }
+  .logo { left: 50% !important; right: auto !important; width: 34vw !important; margin-left: -17vw !important; margin-right: 0 !important; }
   .logo--frendz { width: 46vw !important; margin-left: -23vw !important; }
-  .logo--choc   { top: 88vh; }
-  .logo--frendz { top: 110vh; }
-  .logo--bd     { top: 134vh; }
-  /* hide the decorative rings on phones so the logos read cleanly */
-  .mini { display: none; }
+  .logo--choc   { top: 80vh !important; }
+  .logo--frendz { top: 102vh !important; }
+  .logo--bd     { top: 124vh !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
