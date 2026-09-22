@@ -29,6 +29,8 @@
   .base{clip-path:inset(50% 0 50% 0); animation:crt-open 4s 1s cubic-bezier(.16,.8,.3,1) forwards}
   @keyframes crt-open{ to{ clip-path:inset(0 0 0 0); } }
   .g{opacity:0; pointer-events:none; mix-blend-mode:screen; will-change:transform,clip-path}
+  /* deep-blue tint over the whole boot screen (multiply keeps black black, glow intact) */
+  .tint{position:absolute; inset:0; z-index:6; pointer-events:none; background:#5c78ff; mix-blend-mode:multiply}
   .g1{filter:hue-rotate(180deg) saturate(1.6)} .g2{filter:hue-rotate(60deg) saturate(1.6)}
   .bar{position:absolute; left:0; right:0; height:6px; z-index:5; opacity:0; pointer-events:none;
     mix-blend-mode:screen; background:rgba(120,180,255,.7); box-shadow:0 0 10px rgba(90,150,255,.6)}
@@ -266,6 +268,7 @@
     <img class="g g1" src="boot.png" alt="">
     <img class="g g2" src="boot.png" alt="">
     <div class="bar"></div>
+    <div class="tint"></div>
   </div>
 
   <!-- ===================== DESKTOP ===================== -->
@@ -293,7 +296,7 @@
       <div class="titlebar"><span class="t">Music</span><span class="tbtn raised" data-close>✕</span></div>
       <div class="content" style="text-align:center">
         <div class="mp">
-          <div class="mp-art"><img src="Mockup/vinyl 3.png" alt=""></div>
+          <div class="mp-art"><img src="images various/cover.png" alt=""></div>
           <div class="mp-title">LOCATION</div>
           <div class="mp-artist">BREWSKI</div>
           <div class="mp-seek"><div class="mp-fill"></div></div>
@@ -375,7 +378,7 @@
     <div class="window raised" id="w-tourposter" style="left:520px; top:70px; width:min(400px,90vw)">
       <div class="titlebar"><span class="t">Tour</span><span class="tbtn raised" data-close>✕</span></div>
       <div class="content" style="text-align:center">
-        <img src="Mockup/Tour poster 2.png" alt="Tour poster" class="poster-img">
+        <img src="images various/tour poster.png" alt="Tour poster" class="poster-img">
       </div>
     </div>
 
@@ -890,17 +893,17 @@
       'cap/5-panel-trucker-cap-royal-white-royal-right-6a98fe59a4831.png',
       'cap/5-panel-trucker-cap-royal-white-royal-back-6a98fe59a4674.png']},
     {name:'Tour Poster', variant:'A2 print', price:'$20', imgs:[
-      'tour poster 1.png']},
-    {name:'LOCATION \u2014Vinyl', variant:'12"', price:'$15', imgs:[
-      'vinyl 1.png', 'vinyl 2.png', 'vinyl 3.png']},
-    {name:'LOCATION \u2014CD', variant:'Disc', price:'$10', imgs:[
-      'cd 1.png', 'cd 2.png', 'cd-3-web.png']},
-    {name:'LOCATION \u2014Cassette', variant:'Tape', price:'$10', imgs:[
-      'cassette 1.png', 'cassette-2-web.png', 'cassette 3.png']},
-    {name:'LOCATION \u2014Digital Single', variant:'Download', price:'$2', imgs:[
-      'vinyl 3.png']},
+      '../images various/tour poster.png']},
+    {name:'LOCATION \u2014 Vinyl', variant:'Disk', price:'$15', imgs:[
+      '../images various/vinyl with cover.png', '../images various/cover.png', '../images various/vinyl only.png']},
+    {name:'LOCATION \u2014 CD', variant:'Disc', price:'$10', imgs:[
+      '../images various/cd with cover.png', '../images various/cover signed.png', '../cd 2.png']},
+    {name:'LOCATION \u2014 Cassette', variant:'Tape', price:'$10', imgs:[
+      '../images various/cassette.png', '../images various/cassette cover.png', '../images various/cassette with cover.png']},
+    {name:'LOCATION \u2014 Digital Single', variant:'Download', price:'$2', imgs:[
+      '../images various/cover.png']},
     {name:'Brewski Brick', variant:'Light Blue', price:'$999', imgs:[
-      'Brewski phone 2.png', 'Brewski phone 4.png', 'Brewski phone 3.png']}
+      '../images various/brewski phone.png']}
   ];
   // per-product blurb, indexed to PRODUCTS order
   const DESCS=[

@@ -74,7 +74,7 @@ html, body {
 }
 .logo--choc   { left: 20%;  margin-left: -7vw; animation-delay: -2s; }
 .logo--bd     { left: 50%;  margin-left: -7vw; animation-delay: -4s; }
-.logo--frendz { right: 20%; margin-right: -9vw; width: 18vw; animation-delay: -6s; }
+.logo--frendz { right: 20%; margin-right: -7vw; width: 14vw; animation-delay: -6s; }
 
 /* anchors fill their slot and stay clickable */
 a.logo { pointer-events: auto; cursor: pointer; }
@@ -120,7 +120,6 @@ a.logo img { width: 100%; display: block; }
 
   /* phone: stack the three portal logos vertically, centred + tappable, no overlap */
   .logo { left: 50% !important; right: auto !important; width: 34vw !important; margin-left: -17vw !important; margin-right: 0 !important; }
-  .logo--frendz { width: 46vw !important; margin-left: -23vw !important; }
   .logo--choc   { top: 80vh !important; }
   .logo--frendz { top: 102vh !important; }
   .logo--bd     { top: 124vh !important; }
