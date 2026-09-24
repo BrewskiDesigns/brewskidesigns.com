@@ -855,43 +855,31 @@
   /* ---- Store products + photo carousels ---- */
   const M='Mockup/';
   const PRODUCTS=[
-    {name:'Coordinates Hoodie', variant:'Navy', price:'$60', imgs:[
-      'ghetto hoodie/unisex-essential-eco-cruiser-2.0-hoodie-french-navy-back-6a98fc8e90038.png',
-      'ghetto hoodie/unisex-essential-eco-cruiser-2.0-hoodie-french-navy-front-6a98fc8e8fcda.png']},
-    {name:'Coordinates Hoodie', variant:'White', price:'$60', imgs:[
-      'ghetto hoodie/unisex-essential-eco-cruiser-2.0-hoodie-white-back-6a98fc8e90083.png',
-      'ghetto hoodie/unisex-essential-eco-cruiser-2.0-hoodie-white-front-6a98fc8e8fe35.png']},
-    {name:'Tour Hoodie', variant:'Black', price:'$60', imgs:[
-      'tour hoodie/unisex-essential-eco-cruiser-2.0-hoodie-black-back-6a98fe1dc8181.png',
-      'tour hoodie/unisex-essential-eco-cruiser-2.0-hoodie-black-front-6a98fe1dc7d47.png']},
-    {name:'A Show Of Hands Sweater', variant:'Black', price:'$50', imgs:[
-      'Sweat/unisex-premium-crew-neck-sweatshirt-black-back-6a98fcd1c1b3a.png',
-      'Sweat/unisex-premium-crew-neck-sweatshirt-black-front-6a98fcd1c166c.png']},
-    {name:'Coordinates Tee', variant:'Black', price:'$30', imgs:[
-      'ghetto tee/unisex-classic-tee-black-front-and-back-6a98fd28b314e.png',
-      'ghetto tee/unisex-classic-tee-black-front-6a98fd28b2dbb.png',
-      'ghetto tee/unisex-classic-tee-black-back-6a98fd28b24f1.png']},
-    {name:'Coordinates Tee', variant:'White', price:'$30', imgs:[
-      'ghetto tee 2/unisex-classic-tee-white-front-and-back-6a98fd602820b.png',
-      'ghetto tee 2/unisex-classic-tee-white-front-6a98fd60280b7.png',
-      'ghetto tee 2/unisex-classic-tee-white-back-6a98fd6027e14.png']},
-    {name:'How Many Of Us Tee', variant:'Black', price:'$30', imgs:[
-      'how many black/unisex-classic-tee-black-front-and-back-6a98fdc29bf80.png',
-      'how many black/unisex-classic-tee-black-front-6a98fdc29bca2.png',
-      'how many black/unisex-classic-tee-black-back-6a98fdc29b8ba.png']},
-    {name:'How Many Of Us Tee', variant:'White', price:'$30', imgs:[
-      'how many white/unisex-classic-tee-white-front-and-back-6a98fd985a686.png',
-      'how many white/unisex-classic-tee-white-front-6a98fd985a317.png',
-      'how many white/unisex-classic-tee-white-back-6a98fd9859e2b.png']},
-    {name:'Deaf Ear Tee', variant:'White', price:'$30', imgs:[
-      'phone tee/unisex-classic-tee-white-front-and-back-6a98fdf337278.png',
-      'phone tee/unisex-classic-tee-white-front-6a98fdf336e4b.png',
-      'phone tee/unisex-classic-tee-white-back-6a98fdf336990.png']},
+    {name:'Hop In My Car Tee', variant:'Black', price:'$30', imgs:[
+      'car/unisex-classic-tee-black-front-and-back-6ab3915fb055d.png',
+      'car/unisex-classic-tee-black-front-6ab3915fb03d8.png',
+      'car/unisex-classic-tee-black-back-6ab3915fb00da.png']},
+    {name:'Hop In My Car Tee', variant:'White', price:'$30', imgs:[
+      'car/unisex-classic-tee-white-front-and-back-6ab3915fb05a7.png',
+      'car/unisex-classic-tee-white-front-6ab3915fb0422.png',
+      'car/unisex-classic-tee-white-back-6ab3915fb026e.png']},
+    {name:'Like A Cop Tee', variant:'Black', price:'$30', imgs:[
+      'cop/unisex-classic-tee-black-front-and-back-6ab39135957ea.png',
+      'cop/unisex-classic-tee-black-front-6ab39135952dc.png',
+      'cop/unisex-classic-tee-black-back-6ab3913594e86.png']},
+    {name:'Like A Cop Tee', variant:'White', price:'$30', imgs:[
+      'cop/unisex-classic-tee-white-front-and-back-6ab3913595853.png',
+      'cop/unisex-classic-tee-white-front-6ab3913595379.png',
+      'cop/unisex-classic-tee-white-back-6ab3913594f5f.png']},
+    {name:'Location Services Tee', variant:'Navy', price:'$30', imgs:[
+      'location services/unisex-classic-tee-navy-front-and-back-6ab393c05f751.png',
+      'location services/unisex-classic-tee-navy-front-6ab393c05f5fd.png',
+      'location services/unisex-classic-tee-navy-back-6ab393c05f394.png']},
+    {name:'Tour Hoodie', variant:'French Navy', price:'$60', imgs:[
+      'tour hoodie/unisex-essential-eco-cruiser-2.0-hoodie-french-navy-back-6ab3947b67c63.png',
+      'tour hoodie/unisex-essential-eco-cruiser-2.0-hoodie-french-navy-front-6ab3947b6775d.png']},
     {name:'Tour Cap', variant:'Royal / White', price:'$25', imgs:[
-      'cap/5-panel-trucker-cap-royal-white-royal-front-6a98fe59a430e.png',
-      'cap/5-panel-trucker-cap-royal-white-royal-left-front-6a98fe59a49a4.png',
-      'cap/5-panel-trucker-cap-royal-white-royal-right-6a98fe59a4831.png',
-      'cap/5-panel-trucker-cap-royal-white-royal-back-6a98fe59a4674.png']},
+      'cap.png']},
     {name:'Tour Poster', variant:'A2 print', price:'$20', imgs:[
       '../images various/tour poster.png']},
     {name:'LOCATION \u2014 Vinyl', variant:'Disk', price:'$15', imgs:[
@@ -907,17 +895,14 @@
   ];
   // per-product blurb, indexed to PRODUCTS order
   const DESCS=[
-    'Rep your location wherever you land in this 100% cotton hoodie.',
-    'Rep your location wherever you land in this 100% cotton hoodie.',
-    'Celebrate The Location World Tour by purchasing this 100% cotton hoodie.',
-    'Show off your hands by purchasing this 100% cotton sweater.',
-    'Rep your location wherever you land in this 100% cotton tee.',
-    'Rep your location wherever you land in this 100% cotton tee.',
-    'Celebrate wherever you’re from in this 100% cotton tee.',
-    'Celebrate wherever you’re from in this 100% cotton tee.',
-    'Don’t turn a deaf ear by purchasing this 100% cotton tee.',
-    'Celebrate The Location World Tour by purchasing this trucker cap.',
-    'Celebrate The Location World Tour by purchasing this A2 poster.',
+    'Let them know they cannot hop in your car in this 100% cotton tee.',
+    'Let them know they cannot hop in your car in this 100% cotton tee.',
+    'Cop the look in this 100% cotton tee.',
+    'Cop the look in this 100% cotton tee.',
+    'Rep BREWSKI Computing Location Services in this 100% cotton tee.',
+    'Celebrate the Drop Ur Location World Tour in this 100% cotton hoodie.',
+    'Celebrate the Drop Ur Location World Tour with this trucker cap.',
+    'Celebrate the Drop Ur Location World Tour by purchasing this A2 poster.',
     'Own your copy of LOCATION by purchasing this 7" vinyl.\nSide A — LOCATION   ·   Side B — LOCATION INSTRUMENTAL',
     'Own your copy of LOCATION by purchasing this limited-edition signed CD.\nSide A — LOCATION   ·   Side B — LOCATION INSTRUMENTAL',
     'Own your copy of LOCATION by purchasing this limited-edition signed cassette.',
