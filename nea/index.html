@@ -221,6 +221,11 @@
   #w-video.max .content, #w-extras.max .content{display:flex; flex-direction:column}
   #w-video.max .content h3, #w-extras.max .content h3{flex:0 0 auto}
   #w-video.max .vid-box, #w-extras.max .vid-box{flex:1; height:auto}   /* video fills most of the screen */
+  #w-video .vid-box{height:auto; padding:0; background:#000}
+  #w-video .music-video{width:100%; aspect-ratio:1440/1080; display:block; background:#000; border-radius:2px}
+  #w-video.max .music-video{flex:1; aspect-ratio:auto; height:auto; min-height:0; object-fit:contain}
+  #w-video video::-webkit-media-controls-panel{background:transparent; background-image:none}
+  #w-video video::-webkit-media-controls-enclosure{background:transparent}
   /* Extras = portrait tour advert (9:16) — window fits the video */
   #w-extras{min-width:0}
   #w-extras .content{max-height:none; padding:11px; overflow:hidden}
@@ -325,7 +330,7 @@
     <div class="window raised" id="w-video" style="left:220px; top:120px; width:480px">
       <div class="titlebar"><span class="t">Videos</span><span class="tbtn raised" data-close>✕</span></div>
       <div class="content">
-        <div class="sunken vid-box">[ video goes here ]</div>
+        <div class="sunken vid-box"><video class="music-video" src="music video.mov" controls playsinline preload="metadata"></video></div>
       </div>
     </div>
 
