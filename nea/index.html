@@ -139,8 +139,10 @@
 
   /* ---- Store product grid ---- */
   .shop-sub{font-size:11px; opacity:.7; margin:-6px 0 12px}
-  .shop-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
-  .window.max .shop-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  .shop-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:18px}
+  /* full screen: 5 big columns; scroll to see all rows, with a little room on the sides */
+  .window.max .shop-grid{grid-template-columns:repeat(5,1fr); gap:16px}
+  #w-shop.max .content{padding-left:4vw; padding-right:4vw}
   .prod{display:flex; flex-direction:column; background:rgba(255,255,255,.04);
     border:1px solid #2a4a8a; border-radius:6px; padding:8px; text-align:center; transition:border-color .12s, background .12s}
   .prod:hover{border-color:#5a9bff; background:rgba(255,255,255,.09)}
@@ -349,9 +351,9 @@
     <div class="window raised" id="w-shop" style="left:120px; top:80px; width:600px">
       <div class="titlebar"><span class="t">Store</span><span class="tbtn raised" data-close>✕</span></div>
       <div class="content">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
           <div><div class="shop-sub" style="margin:0">Shop the newest styles to look fly wherever you’re located</div></div>
-          <span class="btn raised" id="cart-btn" style="white-space:nowrap">Basket (0)</span>
+          <span class="btn raised" id="cart-btn" style="white-space:nowrap; margin-top:0">Basket (0)</span>
         </div>
         <div class="shop-grid" id="shop-grid"></div>
       </div>
