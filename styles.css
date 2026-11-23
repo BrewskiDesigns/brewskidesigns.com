@@ -67,10 +67,11 @@ html, body {
    CHOC and FRENDZ (NEA) are clickable links; BD is just the mark.
    ========================================================= */
 .logo {
-  top: 112vh;
+  top: 102vh;
   width: 14vw;
   opacity: 1;
   z-index: 2;
+  animation: none;   /* static — no floating bob */
 }
 .logo--choc   { left: 20%;  margin-left: -7vw; animation-delay: -2s; }
 .logo--bd     { left: 50%;  margin-left: -7vw; animation-delay: -4s; }
